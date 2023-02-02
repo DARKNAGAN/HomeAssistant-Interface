@@ -1,0 +1,2779 @@
+title: Home-CCB
+views:
+  - theme: Backend-selected
+    title: Welcome
+    path: welcome
+    icon: mdi:home-account
+    type: panel
+    badges: []
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: entities
+            entities:
+              - type: custom:hui-element
+                card_type: markdown
+                content: >-
+                  <center>
+
+
+                  ## Votre planning du jour :
+
+                  {% if is_state('calendar.agenda_prenoms_agenda_prenoms','on')
+                  %}
+
+                  ### <ha-icon icon="mdi:calendar-account-outline"></ha-icon> -
+                  Fête : {{
+                  states.calendar.agenda_prenoms_agenda_prenoms.attributes.message
+                  }}
+
+                  {% endif %}
+
+                  {% if
+                  is_state('calendar.agenda_anniversaires_agenda_anniversaires','on')
+                  %}
+
+                  ### <ha-icon icon="mdi:cake-variant-outline"></ha-icon>
+                  Anniversaires : {{
+                  states.calendar.agenda_anniversaires_agenda_anniversaires.attributes.message
+                  }}
+
+                  {% endif %}
+
+                  {% if is_state('calendar.agenda_fetes_agenda_fetes','on') %}
+
+                  ### <ha-icon icon="mdi:calendar-alert-outline"></ha-icon> -
+                  Profiter c'est les {{
+                  states.calendar.agenda_fetes_agenda_fetes.attributes.message
+                  }}
+
+                  {% endif %}
+
+                  ### <ha-icon icon="mdi:clock-check-outline"></ha-icon>
+                  Prochain réveil :
+                  {{(((state_attr('sensor.sm_a528b_next_alarm', 'Time in
+                  Milliseconds') | int / 1000) + 0*60 ) |
+                  timestamp_custom('%H:%M - %a %d %b'))}}
+
+
+                  </center>
+              - type: custom:hui-element
+                card_type: custom:tabbed-card
+                options:
+                  defaultTabIndex: 0
+                tabs:
+                  - attributes:
+                      label: Météo du jour
+                      icon: mdi:weather-cloudy-clock
+                    card:
+                      entity: weather.viry_chatillon
+                      type: weather-forecast
+                      name: Prévision météo du jour
+                      show_current: true
+                      show_forecast: true
+                  - attributes:
+                      label: Météo de la semaine
+                      icon: mdi:weather-cloudy-arrow-right
+                    card:
+                      entity: weather.home_ccb
+                      type: weather-forecast
+                      name: Prévision météo semaine
+                      show_current: true
+                      show_forecast: true
+              - type: custom:hui-element
+                card_type: custom:tabbed-card
+                options:
+                  defaultTabIndex: 0
+                tabs:
+                  - attributes:
+                      label: RER > Paris
+                      icon: mdi:train
+                    card:
+                      name: Viry-Châtillon → Châtelet les Halles (VUPA)
+                      type: custom:idfm-card
+                      line: line:IDFM:C01728
+                      station: stop_area:IDFM:60981
+                      arrivalStation: stop_area:IDFM:474151
+                      maxTrainsShown: '4'
+                  - attributes:
+                      label: RER > Viry-Châtillon
+                      icon: mdi:train
+                    card:
+                      name: Châtelet les Halles → Viry-Châtillon (RUPO)
+                      type: custom:idfm-card
+                      line: line:IDFM:C01728
+                      station: stop_area:IDFM:474151
+                      arrivalStation: stop_area:IDFM:60981
+                      maxTrainsShown: '4'
+              - type: custom:hui-element
+                card_type: button
+                name: Ligne Noctilien N144 | Gare de Lyon → Viry-Châtillon
+                show_name: true
+                show_icon: true
+                show_state: false
+                icon: mdi:bus-clock
+                icon_height: 25px
+                tap_action:
+                  action: url
+                  url_path: https://www.transilien.com/fr/page-lignes/noctilien/n144
+              - type: custom:hui-element
+                card_type: calendar
+                title: Planning de la semaine
+                initial_view: listWeek
+                entities:
+                  - calendar.agenda_anniversaires_agenda_anniversaires
+                  - calendar.agenda_fetes_agenda_fetes
+                  - calendar.planning_gmao_planning_gmao
+  - theme: Backend-selected
+    title: Bibliothèques
+    path: bibliotheques
+    icon: mdi:multimedia
+    type: panel
+    badges: []
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: entities
+            entities:
+              - type: custom:hui-element
+                card_type: vertical-stack
+                cards:
+                  - type: custom:mini-media-player
+                    name: Spotify Control
+                    info: scroll
+                    entity: media_player.spotifyccb
+                    artwork: cover
+                    hide:
+                      volume: true
+                      source: false
+                      icon_state: false
+                      icon: false
+                      power: true
+                    shortcuts:
+                      columns: 3
+                      buttons:
+                        - name: Daily Mix
+                          icon: mdi:account-music
+                          type: service
+                          id: spotcast.start
+                          data:
+                            device_name: ECHOCCB
+                            uri: spotify:playlist:37i9dQZF1E36ob265EuUZs
+                            random_song: true
+                            shuffle: true
+                            start_volume: 50
+                        - name: News
+                          type: service
+                          id: spotcast.start
+                          data:
+                            device_name: ECHOCCB
+                            uri: spotify:playlist:37i9dQZEVXbme2tgo7hwsW
+                            random_song: true
+                            shuffle: true
+                            start_volume: 50
+                        - name: '2020'
+                          type: service
+                          id: spotcast.start
+                          data:
+                            device_name: ECHOCCB
+                            uri: spotify:playlist:37i9dQZF1EM1nWEFUgCRz3
+                            random_song: true
+                            shuffle: true
+                            start_volume: 50
+                        - name: Decouverte
+                          icon: mdi:account-music-outline
+                          type: service
+                          id: spotcast.start
+                          data:
+                            device_name: ECHOCCB
+                            uri: spotify:playlist:37i9dQZEVXcOEmnBe1nsjW
+                            random_song: true
+                            shuffle: true
+                            start_volume: 50
+                        - name: Rock
+                          type: service
+                          id: spotcast.start
+                          data:
+                            device_name: ECHOCCB
+                            uri: spotify:playlist:37i9dQZF1EQpj7X7UK8OOF
+                            random_song: true
+                            shuffle: true
+                            start_volume: 50
+                  - type: custom:mini-media-player
+                    entity: media_player.youtube_music_player
+                    name: Youtube Control
+                    icon: mdi:youtube
+                    info: scroll
+                    artwork: cover
+                    hide:
+                      power: true
+                      shuffle: false
+                      volume: true
+                      icon_state: false
+                    shortcuts:
+                      columns: 3
+                      buttons:
+                        - name: Mon SuperMix
+                          type: Mon SuperMix
+                          id: RDTMAK5uy_kset8DisdE7LSD4TNjEVvrKRTmG7a56sY
+                        - name: Mix News
+                          type: playlist
+                          id: RDTMAK5uy_lr0LWzGrq6FU9GIxWvFHTRPQD2LHMqlFA
+                        - name: Top Tendance
+                          type: playlist
+                          id: PLsa-dEwv56FaoevRy1iSkp2YWt9udgkdJ
+                        - name: Favoris
+                          type: playlist
+                          id: PL5MAIfydPY3zrU3XeazT7eSIDwyp6wS_s
+              - type: custom:hui-element
+                card_type: horizontal-stack
+                title: Streaming Application
+                cards:
+                  - name: Ebooks
+                    show_name: true
+                    icon: mdi:bookshelf
+                    show_icon: true
+                    type: button
+                    tap_action:
+                      action: url
+                      url_path: https://librairie.cunatbrule.fr/
+                  - name: Spotify Web
+                    show_name: true
+                    icon: mdi:spotify
+                    show_icon: true
+                    type: button
+                    tap_action:
+                      action: url
+                      url_path: https://open.spotify.com/
+                  - name: You Tube Web
+                    show_name: true
+                    icon: mdi:youtube
+                    show_icon: true
+                    type: button
+                    tap_action:
+                      action: url
+                      url_path: https://youtube.com/
+  - theme: Backend-selected
+    title: Divertissement
+    views:
+      theme: Backend-selected
+      path: default_view
+      title: Divertissement
+      icon: mdi:multimedia
+      type: horizontal-stack
+    icon: mdi:remote
+    badges:
+      - entity: remote.harmonyccb
+        icon: mdi:remote-tv
+        name: Remote TV
+        tap_action:
+          action: fire-dom-event
+          browser_mod:
+            service: browser_mod.popup
+            data:
+              title: Telecommande Harmony TV
+              content:
+                type: vertical-stack
+                cards:
+                  - type: horizontal-stack
+                    cards:
+                      - type: vertical-stack
+                        cards:
+                          - type: vertical-stack
+                            cards:
+                              - type: horizontal-stack
+                                cards:
+                                  - type: custom:button-card
+                                    entity: select.harmonyccb_activities
+                                    name: Power
+                                    color: lawngreen
+                                    state:
+                                      - value: PowerOff
+                                        color: red
+                                    tap_action:
+                                      action: call-service
+                                      service: remote.turn_off
+                                      service_data:
+                                        entity_id: remote.harmonyccb
+                                        activity: '-1'
+                                    icon: mdi:power
+                                  - type: custom:button-card
+                                    entity: select.harmonyccb_activities
+                                    name: SmartTV
+                                    state:
+                                      - value: SmartTV
+                                        color: lawngreen
+                                    tap_action:
+                                      action: call-service
+                                      service: remote.turn_on
+                                      service_data:
+                                        entity_id: remote.harmonyccb
+                                        activity: '45915040'
+                                    icon: mdi:television-guide
+                                  - type: custom:button-card
+                                    entity: select.harmonyccb_activities
+                                    icon: mdi:music
+                                    name: Musique
+                                    state:
+                                      - value: Musique
+                                        color: lawngreen
+                                    tap_action:
+                                      action: call-service
+                                      service: remote.turn_on
+                                      service_data:
+                                        entity_id: remote.harmonyccb
+                                        activity: '51079713'
+                                  - type: custom:button-card
+                                    entity: select.harmonyccb_activities
+                                    icon: mdi:microsoft-xbox-controller
+                                    name: Jeux
+                                    state:
+                                      - value: Jeux
+                                        color: lawngreen
+                                    tap_action:
+                                      action: call-service
+                                      service: remote.turn_on
+                                      service_data:
+                                        entity_id: remote.harmonyccb
+                                        activity: '51016897'
+                          - type: vertical-stack
+                            cards:
+                              - type: horizontal-stack
+                                cards:
+                                  - show_name: true
+                                    show_icon: true
+                                    type: button
+                                    name: Sources
+                                    show_state: false
+                                    icon: mdi:import
+                                    tap_action:
+                                      action: fire-dom-event
+                                      browser_mod:
+                                        service: browser_mod.popup
+                                        data:
+                                          title: Mes sources
+                                          content:
+                                            type: vertical-stack
+                                            cards:
+                                              - type: horizontal-stack
+                                                cards:
+                                                  - type: button
+                                                    name: SHIELD
+                                                    show_state: false
+                                                    icon: mdi:controller
+                                                    tap_action:
+                                                      action: call-service
+                                                      service: remote.send_command
+                                                      service_data:
+                                                        entity_id: remote.harmonyccb
+                                                        device: AVRCCB
+                                                        command: InputDvd
+                                                  - type: button
+                                                    name: PC
+                                                    show_state: false
+                                                    icon: mdi:desktop-tower-monitor
+                                                    tap_action:
+                                                      action: call-service
+                                                      service: remote.send_command
+                                                      service_data:
+                                                        entity_id: remote.harmonyccb
+                                                        device: AVRCCB
+                                                        command: InputBlu-ray
+                                                  - type: button
+                                                    name: AUX1
+                                                    show_state: false
+                                                    icon: mdi:hdmi-port
+                                                    tap_action:
+                                                      action: call-service
+                                                      service: remote.send_command
+                                                      service_data:
+                                                        entity_id: remote.harmonyccb
+                                                        device: AVRCCB
+                                                        command: InputAux1
+                                              - type: horizontal-stack
+                                                cards:
+                                                  - type: button
+                                                    name: HEOS
+                                                    show_state: false
+                                                    icon: mdi:cast-audio
+                                                    tap_action:
+                                                      action: call-service
+                                                      service: remote.send_command
+                                                      service_data:
+                                                        entity_id: remote.harmonyccb
+                                                        device: AVRCCB
+                                                        command: InputHEOS
+                                                  - type: button
+                                                    name: Bluetooth
+                                                    show_state: false
+                                                    icon: mdi:bluetooth
+                                                    tap_action:
+                                                      action: call-service
+                                                      service: remote.send_command
+                                                      service_data:
+                                                        entity_id: remote.harmonyccb
+                                                        device: AVRCCB
+                                                        command: InputBluetooth
+                                                  - type: button
+                                                    name: Radio
+                                                    show_state: false
+                                                    icon: mdi:radio
+                                                    tap_action:
+                                                      action: call-service
+                                                      service: remote.send_command
+                                                      service_data:
+                                                        entity_id: remote.harmonyccb
+                                                        device: AVRCCB
+                                                        command: InputInternetRadio
+                                  - show_name: true
+                                    show_icon: true
+                                    type: button
+                                    name: Audio Mode
+                                    show_state: false
+                                    icon: mdi:surround-sound
+                                    tap_action:
+                                      action: fire-dom-event
+                                      browser_mod:
+                                        service: browser_mod.popup
+                                        data:
+                                          title: Reglages Audio
+                                          content:
+                                            type: vertical-stack
+                                            cards:
+                                              - type: horizontal-stack
+                                                cards:
+                                                  - show_name: true
+                                                    show_icon: true
+                                                    type: button
+                                                    name: ModePure
+                                                    show_state: false
+                                                    tap_action:
+                                                      action: call-service
+                                                      service: remote.send_command
+                                                      service_data:
+                                                        entity_id: remote.harmonyccb
+                                                        device: AVRCCB
+                                                        command: ModePure
+                                                    icon: ''
+                                                  - show_name: true
+                                                    show_icon: true
+                                                    type: button
+                                                    name: ModeMusic
+                                                    show_state: false
+                                                    tap_action:
+                                                      action: call-service
+                                                      service: remote.send_command
+                                                      service_data:
+                                                        entity_id: remote.harmonyccb
+                                                        device: AVRCCB
+                                                        command: ModeMusic
+                                                    icon: mdi:music
+                                                  - show_name: true
+                                                    show_icon: true
+                                                    type: button
+                                                    name: ModeVideoGame
+                                                    show_state: false
+                                                    tap_action:
+                                                      action: call-service
+                                                      service: remote.send_command
+                                                      service_data:
+                                                        entity_id: remote.harmonyccb
+                                                        device: AVRCCB
+                                                        command: ModeVideoGame
+                                                    icon: mdi:controller-classic
+                                                  - show_name: true
+                                                    show_icon: true
+                                                    type: button
+                                                    name: ModeMovie
+                                                    show_state: false
+                                                    tap_action:
+                                                      action: call-service
+                                                      service: remote.send_command
+                                                      service_data:
+                                                        entity_id: remote.harmonyccb
+                                                        device: AVRCCB
+                                                        command: ModeMovie
+                                                    icon: mdi:movie
+                                              - type: custom:mini-media-player
+                                                entity: media_player.davrccb
+                                                name: Sound Mode actif
+                                                sound_mode: full
+                                                group: true
+                                                hide:
+                                                  icon: true
+                                                  info: true
+                                                  power: true
+                                                  source: true
+                                                  controls: true
+                                                  progress: true
+                                                  state_label: true
+                                                  volume: true
+                                                  mute: true
+                                                  sound_mode: false
+                                                shortcuts:
+                                                  columns: 1
+                                                  buttons:
+                                                    - name: Sound Mode AUTO
+                                                      type: sound_mode
+                                                      id: AUTO
+                                  - type: button
+                                    entity: light.hue_whitecolor2
+                                    icon: mdi:television-ambient-light
+                                    show_name: true
+                                    show_icon: true
+                                    show_state: true
+                                    name: Ambilight+hue
+                                    tap_action:
+                                      action: call-service
+                                      service: remote.send_command
+                                      service_data:
+                                        entity_id: remote.harmonyccb
+                                        device: TVCCB
+                                        command: Ambilight
+                                    hold_action:
+                                      action: call-service
+                                      service: switch.toggle
+                                      target:
+                                        entity_id: switch.tvccb_ambilight_hue
+                                  - show_name: true
+                                    show_icon: true
+                                    type: button
+                                    name: Info
+                                    show_state: false
+                                    tap_action:
+                                      action: call-service
+                                      service: remote.send_command
+                                      service_data:
+                                        entity_id: remote.harmonyccb
+                                        device: AVRCCB
+                                        command: Info
+                                    hold_action:
+                                      action: call-service
+                                      service: remote.send_command
+                                      data:
+                                        device: TVCCB
+                                        command: Options
+                                      target:
+                                        entity_id: remote.harmonyccb
+                                    icon: mdi:information
+                              - type: horizontal-stack
+                                cards:
+                                  - show_name: true
+                                    name: YouTube
+                                    icon: mdi:youtube
+                                    show_icon: true
+                                    type: button
+                                    tap_action:
+                                      action: toggle
+                                    entity: script.start_youtube
+                                  - show_name: true
+                                    name: Spotify
+                                    icon: mdi:spotify
+                                    show_icon: true
+                                    type: button
+                                    tap_action:
+                                      action: toggle
+                                    entity: script.start_spotify
+                                  - show_name: true
+                                    name: KODI
+                                    icon: mdi:kodi
+                                    show_icon: true
+                                    type: button
+                                    tap_action:
+                                      action: toggle
+                                    entity: script.start_kodi
+                                  - show_name: true
+                                    name: Netflix
+                                    icon: mdi:netflix
+                                    show_icon: true
+                                    type: button
+                                    tap_action:
+                                      action: toggle
+                                    entity: script.start_netflix
+                              - type: horizontal-stack
+                                cards:
+                                  - type: vertical-stack
+                                    cards:
+                                      - type: custom:mini-media-player
+                                        entity: media_player.davrccb
+                                        name: Sound Mode actif
+                                        sound_mode: full
+                                        group: true
+                                        hide:
+                                          icon: true
+                                          info: true
+                                          power: true
+                                          source: true
+                                          controls: true
+                                          progress: true
+                                          state_label: true
+                                          volume: true
+                                          mute: true
+                                          sound_mode: false
+                                      - type: custom:mini-media-player
+                                        entity: media_player.davrccb
+                                        name: Level Sound
+                                        group: true
+                                        hide:
+                                          name: true
+                                          icon: true
+                                          info: true
+                                          power: true
+                                          source: true
+                                          controls: true
+                                          progress: true
+                                          state_label: true
+                              - type: horizontal-stack
+                                cards:
+                                  - show_name: true
+                                    show_icon: true
+                                    type: button
+                                    name: Mute
+                                    show_state: false
+                                    tap_action:
+                                      action: call-service
+                                      service: remote.send_command
+                                      service_data:
+                                        entity_id: remote.harmonyccb
+                                        device: AVRCCB
+                                        command: Mute
+                                    icon: mdi:volume-mute
+                                  - show_name: true
+                                    show_icon: true
+                                    type: button
+                                    name: Settings
+                                    show_state: false
+                                    tap_action:
+                                      action: call-service
+                                      service: remote.send_command
+                                      service_data:
+                                        entity_id: remote.harmonyccb
+                                        device: TVCCB
+                                        command: Settings
+                                    hold_action:
+                                      action: call-service
+                                      service: remote.send_command
+                                      data:
+                                        device: AVRCCB
+                                        command: Setup
+                                      target:
+                                        entity_id: remote.harmonyccb
+                                    icon: mdi:cog
+                              - type: horizontal-stack
+                                cards:
+                                  - show_name: true
+                                    show_icon: true
+                                    type: button
+                                    name: VolUp
+                                    show_state: false
+                                    tap_action:
+                                      action: call-service
+                                      service: remote.send_command
+                                      service_data:
+                                        entity_id: remote.harmonyccb
+                                        device: AVRCCB
+                                        command: VolumeUp
+                                    icon: mdi:volume-plus
+                                    hold_action:
+                                      action: call-service
+                                      service: remote.send_command
+                                      data:
+                                        device: AVRCCB
+                                        command: VolumeUp
+                                        num_repeats: 15
+                                      target:
+                                        entity_id: remote.harmonyccb
+                                  - show_name: false
+                                    show_icon: true
+                                    type: button
+                                    name: DirectionUp
+                                    show_state: false
+                                    tap_action:
+                                      action: call-service
+                                      service: remote.send_command
+                                      service_data:
+                                        entity_id: remote.harmonyccb
+                                        device: TVCCB
+                                        command: DirectionUp
+                                    icon: mdi:arrow-up
+                                  - show_name: true
+                                    show_icon: true
+                                    type: button
+                                    name: ChannelUp
+                                    show_state: false
+                                    tap_action:
+                                      action: call-service
+                                      service: remote.send_command
+                                      service_data:
+                                        entity_id: remote.harmonyccb
+                                        device: TVCCB
+                                        command: ChannelUp
+                                    icon: mdi:arrow-up-bold
+                              - type: horizontal-stack
+                                cards:
+                                  - show_name: false
+                                    show_icon: true
+                                    type: button
+                                    name: DirectionLeft
+                                    show_state: false
+                                    tap_action:
+                                      action: call-service
+                                      service: remote.send_command
+                                      service_data:
+                                        entity_id: remote.harmonyccb
+                                        device: TVCCB
+                                        command: DirectionLeft
+                                    icon: mdi:arrow-left
+                                  - show_name: true
+                                    show_icon: false
+                                    type: button
+                                    name: OK
+                                    show_state: false
+                                    tap_action:
+                                      action: call-service
+                                      service: remote.send_command
+                                      service_data:
+                                        entity_id: remote.harmonyccb
+                                        device: TVCCB
+                                        command: OK
+                                    icon: ''
+                                  - show_name: false
+                                    show_icon: true
+                                    type: button
+                                    name: DirectionRight
+                                    show_state: false
+                                    tap_action:
+                                      action: call-service
+                                      service: remote.send_command
+                                      service_data:
+                                        entity_id: remote.harmonyccb
+                                        device: TVCCB
+                                        command: DirectionRight
+                                    icon: mdi:arrow-right
+                              - type: horizontal-stack
+                                cards:
+                                  - show_name: true
+                                    show_icon: true
+                                    type: button
+                                    name: VolDown
+                                    show_state: false
+                                    tap_action:
+                                      action: call-service
+                                      service: remote.send_command
+                                      service_data:
+                                        entity_id: remote.harmonyccb
+                                        device: AVRCCB
+                                        command: VolumeDown
+                                    hold_action:
+                                      action: call-service
+                                      service: remote.send_command
+                                      data:
+                                        device: AVRCCB
+                                        command: VolumeDown
+                                        num_repeats: 21
+                                      target:
+                                        entity_id: remote.harmonyccb
+                                    icon: mdi:volume-minus
+                                  - show_name: false
+                                    show_icon: true
+                                    type: button
+                                    name: DirectionDown
+                                    show_state: false
+                                    tap_action:
+                                      action: call-service
+                                      service: remote.send_command
+                                      service_data:
+                                        entity_id: remote.harmonyccb
+                                        device: TVCCB
+                                        command: DirectionDown
+                                    icon: mdi:arrow-down
+                                  - show_name: true
+                                    show_icon: true
+                                    type: button
+                                    name: ChannelDown
+                                    show_state: false
+                                    tap_action:
+                                      action: call-service
+                                      service: remote.send_command
+                                      service_data:
+                                        entity_id: remote.harmonyccb
+                                        device: TVCCB
+                                        command: ChannelDown
+                                    icon: mdi:arrow-down-bold
+                              - type: horizontal-stack
+                                cards:
+                                  - show_name: true
+                                    show_icon: true
+                                    type: button
+                                    name: Rewind
+                                    show_state: false
+                                    tap_action:
+                                      action: call-service
+                                      service: remote.send_command
+                                      service_data:
+                                        entity_id: remote.harmonyccb
+                                        device: TVCCB
+                                        command: Rewind
+                                    icon: mdi:rewind
+                                  - show_name: true
+                                    show_icon: true
+                                    type: button
+                                    name: Play
+                                    show_state: false
+                                    tap_action:
+                                      action: call-service
+                                      service: remote.send_command
+                                      service_data:
+                                        entity_id: remote.harmonyccb
+                                        device: TVCCB
+                                        command: Play
+                                    icon: mdi:play
+                                  - show_name: true
+                                    show_icon: true
+                                    type: button
+                                    name: FastForward
+                                    show_state: false
+                                    tap_action:
+                                      action: call-service
+                                      service: remote.send_command
+                                      service_data:
+                                        entity_id: remote.harmonyccb
+                                        device: TVCCB
+                                        command: FastForward
+                                    icon: mdi:fast-forward
+                              - type: horizontal-stack
+                                cards:
+                                  - show_name: true
+                                    show_icon: true
+                                    type: button
+                                    name: Record
+                                    show_state: false
+                                    tap_action:
+                                      action: call-service
+                                      service: remote.send_command
+                                      service_data:
+                                        entity_id: remote.harmonyccb
+                                        device: TVCCB
+                                        command: Record
+                                    icon: mdi:record
+                                  - show_name: true
+                                    show_icon: true
+                                    type: button
+                                    name: Pause
+                                    show_state: false
+                                    tap_action:
+                                      action: call-service
+                                      service: remote.send_command
+                                      service_data:
+                                        entity_id: remote.harmonyccb
+                                        device: TVCCB
+                                        command: Pause
+                                    icon: mdi:pause
+                                  - show_name: true
+                                    show_icon: true
+                                    type: button
+                                    name: Stop
+                                    show_state: false
+                                    tap_action:
+                                      action: call-service
+                                      service: remote.send_command
+                                      service_data:
+                                        entity_id: remote.harmonyccb
+                                        device: TVCCB
+                                        command: Stop
+                                    icon: mdi:stop
+                              - type: horizontal-stack
+                                cards:
+                                  - show_name: true
+                                    show_icon: true
+                                    type: button
+                                    name: Home
+                                    show_state: false
+                                    tap_action:
+                                      action: call-service
+                                      service: remote.send_command
+                                      service_data:
+                                        entity_id: remote.harmonyccb
+                                        device: NVIDIACCB
+                                        command: Home
+                                    hold_action:
+                                      action: call-service
+                                      service: remote.send_command
+                                      data:
+                                        device: TVCCB
+                                        command: Home
+                                      target:
+                                        entity_id: remote.harmonyccb
+                                    icon: mdi:home
+                                  - show_name: true
+                                    show_icon: true
+                                    type: button
+                                    name: Back
+                                    show_state: false
+                                    tap_action:
+                                      action: call-service
+                                      service: remote.send_command
+                                      service_data:
+                                        entity_id: remote.harmonyccb
+                                        device: TVCCB
+                                        command: Back
+                                    icon: mdi:arrow-u-left-bottom
+      - entity: person.christian
+        tap_action:
+          action: fire-dom-event
+          browser_mod:
+            service: browser_mod.popup
+            data:
+              title: Christian - Samsung A52s
+              content:
+                type: vertical-stack
+                cards:
+                  - type: entities
+                    state_color: true
+                    show_header_toggle: false
+                    entities:
+                      - entity: person.christian
+                        secondary_info: last-updated
+                      - type: custom:hui-element
+                        card_type: history-graph
+                        entities:
+                          - entity: person.christian
+                        hours_to_show: 24
+                        refresh_interval: 0
+                      - type: custom:hui-element
+                        card_type: glance
+                        show_name: false
+                        entities:
+                          - entity: binary_sensor.sm_a528b_is_charging
+                          - entity: sensor.sm_a528b_battery_level
+                          - entity: sensor.sm_a528b_battery_temperature
+                      - type: custom:hui-element
+                        card_type: entities
+                        entities:
+                          - entity: sensor.sm_a528b_geocoded_location
+                            name: Localisation
+                          - entity: sensor.sm_a528b_public_ip_address
+                            name: IP Public
+                          - entity: sensor.sm_a528b_sim_1
+                            name: 'N° téléphone: 07.57.76.36.34'
+                          - entity: person.ccunatbrule
+                            name: 'IMEI: 357645763566230 - 01'
+                            icon: mdi:identifier
+                          - type: button
+                            name: Trouver mon smartphone
+                            icon: mdi:bell-ring
+                            tap_action:
+                              action: call-service
+                              service: script.find_my_phone
+                          - type: weblink
+                            name: Find your phone
+                            url: https://myaccount.google.com/find-your-phone
+                            icon: mdi:map-marker-radius
+                  - type: map
+                    aspect_ratio: '16:9'
+                    default_zoom: 13
+                    entities:
+                      - device_tracker.sm_a528b
+                      - person.ccunatbrule
+      - entity: person.home
+        tap_action:
+          action: fire-dom-event
+          browser_mod:
+            service: browser_mod.popup
+            data:
+              title: Lenovo Tab M8
+              content:
+                type: vertical-stack
+                cards:
+                  - type: entities
+                    state_color: true
+                    show_header_toggle: false
+                    entities:
+                      - entity: device_tracker.lenovo_tb_8505x
+                        secondary_info: last-updated
+                      - type: custom:hui-element
+                        card_type: history-graph
+                        entities:
+                          - entity: device_tracker.lenovo_tb_8505x
+                            name: TabM8
+                        hours_to_show: 24
+                        refresh_interval: 0
+                      - type: custom:hui-element
+                        card_type: glance
+                        show_name: false
+                        entities:
+                          - entity: binary_sensor.lenovo_tb_8505x_is_charging
+                          - entity: sensor.lenovo_tb_8505x_battery_level
+                          - entity: sensor.lenovo_tb_8505x_battery_temperature
+                      - type: custom:hui-element
+                        card_type: entities
+                        entities:
+                          - entity: sensor.lenovo_tb_8505x_geocoded_location
+                            name: Localisation
+                          - entity: sensor.lenovo_tb_8505x_public_ip_address
+                            name: IP Public
+                          - entity: sensor.lenovo_tb_8505x_sim_1
+                            name: 'N° téléphone: 06 26 07 84 12'
+                          - entity: device_tracker.lenovo_tb_8505x
+                            name: 'IMEI : 863440050092661 - 78'
+                            icon: mdi:identifier
+                          - type: button
+                            name: Trouver ma tablette
+                            icon: mdi:bell-ring
+                            tap_action:
+                              action: call-service
+                              service: script.find_my_tab
+                          - type: weblink
+                            name: Find your tab
+                            url: https://myaccount.google.com/find-your-phone
+                            icon: mdi:map-marker-radius
+                  - type: map
+                    aspect_ratio: '16:9'
+                    default_zoom: 13
+                    entities:
+                      - device_tracker.lenovo_tb_8505x
+      - entity: person.moto
+        tap_action:
+          action: fire-dom-event
+          browser_mod:
+            service: browser_mod.popup
+            data:
+              title: Yamaha MT07 - Moto
+              content:
+                type: vertical-stack
+                cards:
+                  - type: entities
+                    state_color: true
+                    show_header_toggle: false
+                    entities:
+                      - entity: device_tracker.sm_a105fn
+                        name: Moto MT-07
+                        secondary_info: last-updated
+                      - type: custom:hui-element
+                        card_type: history-graph
+                        entities:
+                          - entity: device_tracker.sm_a105fn
+                            name: Moto
+                        hours_to_show: 24
+                        refresh_interval: 0
+                      - type: custom:hui-element
+                        card_type: glance
+                        show_name: false
+                        entities:
+                          - entity: binary_sensor.sm_a105fn_is_charging
+                          - entity: sensor.sm_a105fn_battery_level
+                          - entity: sensor.sm_a105fn_battery_temperature
+                      - type: custom:hui-element
+                        card_type: entities
+                        entities:
+                          - entity: sensor.sm_a105fn_geocoded_location
+                            name: Localisation
+                          - entity: sensor.sm_a105fn_public_ip_address
+                            name: IP Public
+                          - entity: sensor.sm_a105fn_sim_1
+                            name: 'N° téléphone: 06 17 42 90 28'
+                          - entity: device_tracker.sm_a105fn
+                            name: 'IMEI : 357955105543098 - 01'
+                            icon: mdi:identifier
+                          - type: button
+                            name: Trouver ma moto
+                            icon: mdi:bell-ring
+                            tap_action:
+                              action: call-service
+                              service: script.find_my_moto
+                          - type: weblink
+                            name: Find your phone
+                            url: https://myaccount.google.com/find-your-phone
+                            icon: mdi:map-marker-radius
+                  - type: map
+                    aspect_ratio: '16:9'
+                    default_zoom: 13
+                    entities:
+                      - device_tracker.sm_a105fn
+    cards:
+      - type: vertical-stack
+        title: Multimédia
+        cards:
+          - type: vertical-stack
+            cards:
+              - type: entities
+                entities:
+                  - type: custom:mini-media-player
+                    name: Home Cinéma
+                    icon: mdi:audio-video
+                    entity: media_player.davrccb
+                    artwork: material
+                    hide:
+                      sound_mode: false
+                      power_state: false
+                      source: false
+                      icon: false
+                      play_pause: true
+                  - type: custom:mini-media-player
+                    name: Shield TV
+                    icon: mdi:television-guide
+                    info: scroll
+                    entity: media_player.android_tv_192_168_2_43
+                    artwork: full-cover
+                    hide:
+                      volume: true
+                      source: true
+                      power_state: false
+                      icon: false
+                  - type: custom:mini-media-player
+                    name: Alexa Echo
+                    icon: mdi:speaker-wireless
+                    info: scroll
+                    entity: media_player.echoccb
+                    artwork: cover
+                    hide:
+                      volume: false
+                      source: true
+                      power: true
+                      icon_state: false
+                      icon: false
+                  - entity: switch.desktopccb
+                    icon: mdi:desktop-tower-monitor
+                    name: WOL DESKTOPCCB
+                  - type: custom:restriction-card
+                    card:
+                      entity: switch.mqtt_aqara_pc
+                      icon: mdi:power-socket-de
+                      name: Prise imprimante 3D
+                    condition:
+                      entity: switch.mqtt_aqara_pc
+                      value: 'on'
+                    restrictions:
+                      confirm:
+                        text: Are you sure you want to unlock?
+                    row: true
+      - type: vertical-stack
+        title: Lumières
+        cards:
+          - type: entities
+            entities:
+              - type: custom:slider-entity-row
+                entity: light.salon
+                toggle: true
+                full_row: false
+                name: Salon
+              - type: custom:slider-entity-row
+                entity: light.chambre
+                toggle: true
+                full_row: false
+                name: Chambre
+              - type: custom:vertical-stack-in-card
+                cards:
+                  - type: glance
+                    entities:
+                      - entity: light.toilette
+                        icon: mdi:lightbulb-auto-outline
+                      - entity: binary_sensor.mqtt_aqara_motionsensor_occupancy
+                        name: Présence
+                name: Toilette
+              - type: custom:slider-entity-row
+                entity: light.salle_de_jeux
+                toggle: true
+                full_row: false
+                name: Salle de jeux
+              - type: custom:rgb-light-card
+                entity: light.salle_de_jeux
+                size: 35
+                colors:
+                  - rgb_color:
+                      - 255
+                      - 0
+                      - 0
+                    transition: 1
+                  - rgb_color:
+                      - 0
+                      - 255
+                      - 0
+                    transition: 1
+                  - rgb_color:
+                      - 0
+                      - 0
+                      - 255
+                    transition: 1
+                  - rgb_color:
+                      - 255
+                      - 255
+                      - 255
+                    transition: 1
+                  - hs_color:
+                      - 60
+                      - 30
+              - type: custom:rgb-light-card
+                colors:
+                  - type: call-service
+                    service: hue.activate_scene
+                    service_data:
+                      entity_id: scene.salle_de_jeux_attenue
+                    icon_color: center/180% no-repeat url("/local/images/hue/dim.png")
+                  - type: call-service
+                    service: hue.activate_scene
+                    service_data:
+                      entity_id: scene.salle_de_jeux_aurore_boreale
+                    icon_color: center/100% no-repeat url("/local/images/hue/boreale.png")
+                  - type: call-service
+                    service: hue.activate_scene
+                    service_data:
+                      entity_id: scene.salle_de_jeux_lecture
+                    icon_color: center/110% no-repeat url("/local/images/hue/reading.png")
+                  - type: call-service
+                    service: hue.activate_scene
+                    service_data:
+                      entity_id: scene.salle_de_jeux_stimulation
+                    icon_color: >-
+                      center/110% no-repeat
+                      url("/local/images/hue/energize.png")
+                  - type: call-service
+                    service: hue.activate_scene
+                    service_data:
+                      entity_id: scene.salle_de_jeux_crepuscule_tropical
+                    icon_color: >-
+                      center/100% no-repeat
+                      url("/local/images/hue/tropical.png")
+                  - type: call-service
+                    service: remote.send_command
+                    service_data:
+                      entity_id: remote.harmonyccb
+                      device: TVCCB
+                      command: Ambilight
+                    icon_color: >-
+                      center/75% no-repeat
+                      url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20id%3D%22mdi-television-ambient-light%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20fill%3D%22%23FFFFFF%22%20d%3D%22M3%2011H0V9H3V11M3%2014H0V16H3V14M5%205.12L2.88%203L1.46%204.41L3.59%206.54L5%205.12M10%205V2H8V5H10M24%209H21V11H24V9M16%205V2H14V5H16M20.41%206.54L22.54%204.42L21.12%203L19%205.12L20.41%206.54M24%2014H21V16H24V14M19%209V16C19%2017.1%2018.1%2018%2017%2018H15V20H9V18H7C5.9%2018%205%2017.1%205%2016V9C5%207.9%205.9%207%207%207H17C18.1%207%2019%207.9%2019%209M17%209H7V16H17V9M19%2019.88L21.12%2022L22.54%2020.59L20.41%2018.47L19%2019.88M3.59%2018.46L1.47%2020.59L2.88%2022L5%2019.88L3.59%2018.46Z%22%20%2F%3E%3C%2Fsvg%3E")
+      - type: entities
+        entities:
+          - entity: switch.mqtt_develco_smokedetector_alarm
+          - entity: number.mqtt_develco_smokedetector_max_duration
+          - entity: binary_sensor.mqtt_develco_smokedetector_battery_low
+          - entity: binary_sensor.mqtt_develco_smokedetector_fault
+          - entity: sensor.mqtt_develco_smokedetector_reliability
+          - entity: binary_sensor.mqtt_develco_smokedetector_smoke
+          - entity: sensor.mqtt_develco_smokedetector_temperature
+          - entity: binary_sensor.mqtt_develco_smokedetector_test
+      - type: grid
+        square: false
+        columns: 1
+        cards:
+          - type: thermostat
+            entity: climate.mqtt_aqara_thermostat
+          - type: entities
+            entities:
+              - entity: number.mqtt_aqara_thermostat_away_preset_temperature
+              - entity: select.mqtt_aqara_thermostat_sensor
+              - entity: lock.mqtt_aqara_thermostat_child_lock
+              - entity: switch.mqtt_aqara_thermostat_valve_detection
+              - entity: switch.mqtt_aqara_thermostat_window_detection
+              - entity: binary_sensor.mqtt_aqara_thermostat_calibrated
+              - entity: binary_sensor.mqtt_aqara_thermostat_window_open
+      - type: entities
+        entities:
+          - entity: lock.mqtt_danalock_smartlock
+          - entity: sensor.mqtt_danalock_smartlock_action
+          - entity: sensor.mqtt_danalock_smartlock_action_source_name
+          - entity: sensor.mqtt_danalock_smartlock_action_user
+      - type: entities
+        entities:
+          - entity: sensor.mqtt_develco_keypad_action
+          - entity: sensor.mqtt_develco_keypad_action_code
+          - entity: sensor.mqtt_develco_keypad_action_transaction
+          - entity: sensor.mqtt_develco_keypad_action_zone
+          - entity: binary_sensor.mqtt_develco_keypad_battery_low
+          - entity: binary_sensor.mqtt_develco_keypad_tamper
+      - type: glance
+        entities:
+          - entity: binary_sensor.mqtt_aqara_contactsensor_contact
+      - type: alarm-panel
+        states:
+          - arm_home
+          - arm_away
+          - arm_night
+          - arm_vacation
+          - arm_custom_bypass
+        entity: alarm_control_panel.alarmo
+      - show_name: true
+        show_icon: true
+        type: button
+        tap_action:
+          action: toggle
+        entity: binary_sensor.mqtt_develco_smokedetector_test
+      - type: entities
+        entities:
+          - sensor.ups_battery_chemistry
+          - sensor.ups_battery_runtime
+          - sensor.ups_beeper_status
+          - sensor.ups_high_voltage_transfer
+          - sensor.ups_load
+          - sensor.ups_load_restart_delay
+          - sensor.ups_load_shutdown_timer
+          - sensor.ups_load_start_timer
+          - sensor.ups_low_battery_setpoint
+          - sensor.ups_low_voltage_transfer
+          - sensor.ups_nominal_output_frequency
+          - sensor.ups_nominal_output_voltage
+          - sensor.ups_nominal_power
+          - sensor.ups_output_voltage
+          - sensor.ups_status
+          - sensor.ups_status_data
+          - sensor.ups_ups_shutdown_delay
+          - sensor.ups_ups_type
+      - type: vertical-stack
+        cards:
+          - type: entities
+            entities:
+              - type: custom:hui-element
+                card_type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    entity: sensor.ups_status
+                    name: Batterie onduleur
+                    icon: mdi:battery
+                    show_state: true
+                    state:
+                      - value: On Battery
+                        color: orange
+                        icon: mdi:battery-arrow-down
+                        styles:
+                          icon:
+                            - animation: blink 5s ease infinite
+                      - value: Online
+                        color: green
+                        icon: mdi:battery-charging
+                      - value: unavailable
+                        color: red
+                        icon: mdi:battery-alert
+                    tap_action:
+                      action: fire-dom-event
+                      browser_mod:
+                        service: browser_mod.popup
+                        data:
+                          title: Onduleur Eaton3S-850F
+                          content:
+                            type: vertical-stack
+                            cards:
+                              - type: custom:vertical-stack-in-card
+                                cards:
+                                  - show_name: true
+                                    show_icon: true
+                                    show_state: true
+                                    type: glance
+                                    entities:
+                                      - entity: sensor.ups_status
+                                      - entity: sensor.ups_battery_runtime
+                                        name: Autonomie
+                                      - entity: sensor.ups_load
+                                        name: Niveau de charge
+                                  - type: gauge
+                                    entity: sensor.ups_battery_charge
+                                    name: Capacité de la batterie
+                                    state_color: true
+                                    needle: false
+                                    severity:
+                                      green: 80
+                                      yellow: 50
+                                      red: 20
+  - theme: Backend-selected
+    title: Supervision
+    path: supervision
+    icon: mdi:server-network
+    type: panel
+    badges: []
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: entities
+            entities:
+              - type: custom:hui-element
+                card_type: horizontal-stack
+                cards:
+                  - type: gauge
+                    entity: sensor.viry_chatillon_temperature
+                    min: -30
+                    max: 40
+                    needle: true
+                    segments:
+                      - from: -30
+                        color: '#039be5'
+                      - from: 10
+                        color: '#43a047'
+                      - from: 28
+                        color: '#ffa600'
+                    name: Température Exterieur
+                  - type: gauge
+                    entity: sensor.viry_chatillon_pressure
+                    min: 950
+                    max: 1050
+                    needle: true
+                    segments:
+                      - from: 950
+                        color: '#ffa600'
+                      - from: 1010
+                        color: '#039be5'
+                      - from: 1020
+                        color: '#43a047'
+                    name: Pression Atmosphérique Exterieur
+              - type: custom:hui-element
+                card_type: horizontal-stack
+                cards:
+                  - type: gauge
+                    entity: sensor.mqtt_aqara_thermosensor_temperature
+                    min: 0
+                    max: 30
+                    needle: true
+                    segments:
+                      - from: 0
+                        color: '#039be5'
+                      - from: 16
+                        color: '#43a047'
+                      - from: 23
+                        color: '#ffa600'
+                    name: Température Maison
+                  - type: gauge
+                    entity: sensor.mqtt_aqara_thermosensor_humidity
+                    needle: true
+                    min: 0
+                    max: 100
+                    segments:
+                      - from: 0
+                        color: '#ffa600'
+                      - from: 30
+                        color: '#43a047'
+                      - from: 70
+                        color: '#ffa600'
+                    name: Humidité Maison
+                  - type: gauge
+                    entity: sensor.mqtt_aqara_thermosensor_pressure
+                    min: 950
+                    max: 1050
+                    needle: true
+                    segments:
+                      - from: 950
+                        color: '#ffa600'
+                      - from: 1010
+                        color: '#039be5'
+                      - from: 1020
+                        color: '#43a047'
+                    name: Pression Atmosphérique Maison
+          - type: entities
+            entities:
+              - type: custom:vertical-stack-in-card
+                cards:
+                  - type: custom:button-card
+                    entity: sensor.ups_status
+                    name: Batterie onduleur
+                    icon: mdi:battery
+                    show_state: true
+                    state:
+                      - value: On Battery
+                        color: orange
+                        icon: mdi:battery-arrow-down
+                        styles:
+                          icon:
+                            - animation: blink 5s ease infinite
+                      - value: Online
+                        color: green
+                        icon: mdi:battery-charging
+                      - value: unavailable
+                        color: red
+                        icon: mdi:battery-alert
+                    tap_action:
+                      action: fire-dom-event
+                      browser_mod:
+                        service: browser_mod.popup
+                        data:
+                          title: Onduleur Eaton3S-850F
+                          content:
+                            type: vertical-stack
+                            cards:
+                              - type: custom:vertical-stack-in-card
+                                cards:
+                                  - show_name: true
+                                    show_icon: true
+                                    show_state: true
+                                    type: glance
+                                    entities:
+                                      - entity: sensor.ups_status
+                                      - entity: sensor.ups_battery_runtime
+                                        name: Autonomie
+                                      - entity: sensor.ups_load
+                                        name: Niveau de charge
+                                  - type: gauge
+                                    entity: sensor.ups_battery_charge
+                                    name: Capacité de la batterie
+                                    state_color: true
+                                    needle: false
+                                    severity:
+                                      green: 80
+                                      yellow: 50
+                                      red: 20
+              - type: custom:vertical-stack-in-card
+                cards:
+                  - type: custom:button-card
+                    entity: sensor.nasccb_temperature
+                    icon: mdi:nas
+                    name: SYNOLOGY NAS
+                    styles:
+                      card:
+                        - animation: |
+                            [[[
+                              if (states["sensor.nasccb_temperature"].state && 
+                                states["sensor.nasccb_cpu_utilization_total"].state &&
+                                states["sensor.nasccb_memory_usage_real"].state &&
+                                states["sensor.nasccb_drive_1_temperature"].state &&
+                                states["sensor.nasccb_drive_2_temperature"].state < 80 
+                                && 
+                                states["sensor.nasccb_volume_1_status"].state &&
+                                states["sensor.nasccb_drive_1_status"].state && 
+                                states["sensor.nasccb_drive_2_status"].state == "normal");
+                              else return 'blink 3s ease infinite';
+                            ]]]
+                      grid:
+                        - grid-template-areas: '"i n"'
+                        - grid-template-columns: 1fr 1fr
+                      name:
+                        - font-weight: bold
+                        - justify-self: start
+                        - color: |
+                            [[[
+                              if (states["sensor.nasccb_temperature"].state && 
+                                states["sensor.nasccb_cpu_utilization_total"].state &&
+                                states["sensor.nasccb_memory_usage_real"].state &&
+                                states["sensor.nasccb_drive_1_temperature"].state &&
+                                states["sensor.nasccb_drive_2_temperature"].state < 80 
+                                && 
+                                states["sensor.nasccb_volume_1_status"].state &&
+                                states["sensor.nasccb_drive_1_status"].state && 
+                                states["sensor.nasccb_drive_2_status"].state == "normal")
+                              return 'green';
+                              else return 'red';
+                            ]]]
+                      icon:
+                        - color: |
+                            [[[
+                              if (states["sensor.nasccb_temperature"].state && 
+                                states["sensor.nasccb_cpu_utilization_total"].state &&
+                                states["sensor.nasccb_memory_usage_real"].state &&
+                                states["sensor.nasccb_drive_1_temperature"].state &&
+                                states["sensor.nasccb_drive_2_temperature"].state < 80 
+                                && 
+                                states["sensor.nasccb_volume_1_status"].state &&
+                                states["sensor.nasccb_drive_1_status"].state && 
+                                states["sensor.nasccb_drive_2_status"].state == "normal")
+                              return 'green';
+                              else return 'red';
+                            ]]]
+                    tap_action:
+                      action: fire-dom-event
+                      browser_mod:
+                        service: browser_mod.popup
+                        data:
+                          title: SYNOLOGY NAS
+                          content:
+                            type: vertical-stack
+                            cards:
+                              - type: entities
+                                card_mod:
+                                  style: |
+                                    ha-card {
+                                      font-family: var(--primary-font-family);
+                                    }
+                                    .card-content {
+                                      padding-top: 0px;
+                                      padding-bottom: 0px;
+                                    }              
+                                entities:
+                                  - type: divider
+                                  - sensor.nasccb_volume_1_volume_used
+                                  - sensor.nasccb_upload_throughput
+                                  - sensor.nasccb_download_throughput
+                                  - type: divider
+                              - type: custom:mini-graph-card
+                                card_mod:
+                                  style: |
+                                    ha-card {
+                                      font-family: var(--primary-font-family);
+                                    }
+                                    .graph {
+                                      padding-top: 0px;
+                                      padding-bottom: 0px;
+                                    }
+                                    .info {
+                                      padding-bottom: 0px;
+                                    }
+                                    .flex {
+                                      padding-bottom: 10px;
+                                    }
+                                entities:
+                                  - sensor.nasccb_upload_throughput
+                                  - sensor.nasccb_download_throughput
+                                name: Download / Upload
+                                align_state: center
+                                align_icon: right
+                                font_size: 100
+                                font_size_header: 11
+                                hours_to_show: 24
+                                line_color: '#4AE1DC'
+                                line_width: 4
+                                animate: true
+                                points_per_hour: 2
+                                show:
+                                  fill: false
+                                  graph: line
+                                  extrema: true
+                                  icon: true
+                                  name: true
+                              - type: custom:mini-graph-card
+                                card_mod:
+                                  style: |
+                                    ha-card {
+                                      font-family: var(--primary-font-family);
+                                    }
+                                    .graph {
+                                      padding-top: 0px;
+                                      padding-bottom: 0px;
+                                    }
+                                    .info {
+                                      padding-bottom: 0px;
+                                    }
+                                    .flex {
+                                      padding-bottom: 10px;
+                                    }
+                                entities:
+                                  - sensor.nasccb_temperature
+                                name: CPU Température
+                                align_state: center
+                                align_icon: right
+                                font_size: 100
+                                font_size_header: 11
+                                hours_to_show: 24
+                                line_color: '#4AE1DC'
+                                line_width: 4
+                                animate: true
+                                points_per_hour: 2
+                                show:
+                                  fill: false
+                                  graph: line
+                                  extrema: true
+                                  icon: true
+                                  name: true
+                              - type: horizontal-stack
+                                cards:
+                                  - type: horizontal-stack
+                                    cards:
+                                      - type: custom:mini-graph-card
+                                        card_mod:
+                                          style: |
+                                            ha-card {
+                                              font-family: var(--primary-font-family);
+                                            }
+                                            .graph {
+                                              padding-top: 0px;
+                                              padding-bottom: 0px;
+                                            }
+                                            .info {
+                                              padding-bottom: 0px;
+                                            }
+                                            .flex {
+                                              padding-bottom: 10px;
+                                            }
+                                        entities:
+                                          - sensor.nasccb_cpu_utilization_total
+                                        name: CPU LOAD
+                                        align_state: center
+                                        align_icon: right
+                                        font_size: 100
+                                        font_size_header: 11
+                                        hours_to_show: 24
+                                        line_color: '#4A8A4A'
+                                        line_width: 4
+                                        animate: true
+                                        points_per_hour: 2
+                                        show:
+                                          fill: false
+                                          graph: line
+                                          extrema: true
+                                          icon: true
+                                          name: true
+                                  - type: custom:mini-graph-card
+                                    card_mod:
+                                      style: |
+                                        ha-card {
+                                          font-family: var(--primary-font-family);
+                                        }
+                                        .graph {
+                                          padding-top: 0px;
+                                          padding-bottom: 0px;
+                                        }
+                                        .info {
+                                          padding-bottom: 0px;
+                                        }
+                                        .flex {
+                                          padding-bottom: 10px;
+                                        }
+                                    entities:
+                                      - sensor.nasccb_memory_usage_real
+                                    name: Memory USE
+                                    align_state: center
+                                    align_icon: right
+                                    font_size: 100
+                                    font_size_header: 11
+                                    hours_to_show: 24
+                                    line_color: orange
+                                    line_width: 4
+                                    animate: true
+                                    points_per_hour: 2
+                                    show:
+                                      fill: false
+                                      graph: line
+                                      extrema: true
+                                      icon: true
+                                      name: true
+                              - type: entities
+                                entities:
+                                  - type: weblink
+                                    name: NASCCB
+                                    url: https://192.168.2.26:5001/
+                                    icon: mdi:nas
+                                  - type: weblink
+                                    name: Survey Station
+                                    url: http://192.168.2.26/cam
+                                    icon: mdi:video
+                                  - type: weblink
+                                    name: Virtual Station
+                                    url: http://192.168.2.26/vmm/
+                                    icon: mdi:server
+                                  - type: weblink
+                                    name: phpMyAdmin
+                                    url: http://192.168.2.26/phpMyAdmin/
+                                    icon: mdi:database
+                  - type: glance
+                    entities:
+                      - entity: sensor.nasccb_cpu_utilization_total
+                        name: CPU
+                      - entity: sensor.nasccb_memory_usage_real
+                        name: RAM
+                      - entity: sensor.nasccb_drive_1_temperature
+                        name: Température
+                  - type: glance
+                    entities:
+                      - entity: sensor.nasccb_volume_1_status
+                        name: Volume
+                        icon: mdi:database
+                      - entity: sensor.nasccb_drive_1_status
+                        name: Disk 1
+                        icon: mdi:harddisk
+                      - entity: sensor.nasccb_drive_2_status
+                        name: Disk 2
+                        icon: mdi:harddisk
+              - type: custom:vertical-stack-in-card
+                cards:
+                  - type: custom:button-card
+                    entity: binary_sensor.sensor.myip
+                    icon: mdi:router
+                    name: Router ASUS
+                    styles:
+                      grid:
+                        - grid-template-areas: '"i n"'
+                        - grid-template-columns: 1fr 1fr
+                      name:
+                        - font-weight: bold
+                        - justify-self: start
+                        - color: |
+                            [[[
+                              if (states["switch.routerccb_wireless_2_4_ghz"].state &&
+                                states["switch.routerccb_wireless_5_ghz"].state == "on" &&
+                                states["sensor.routerccb_ram"].state && 
+                                states["sensor.routerccb_cpu"].state < 80 &&
+                                states["sensor.routerccb_temperature_cpu"].state < 90 && 
+                                states["sensor.myip"].state != "unavailable")
+                                return 'green'
+                                else return 'red';
+                            ]]]
+                      icon:
+                        - color: |
+                            [[[
+                              if (states["switch.routerccb_wireless_2_4_ghz"].state &&
+                                states["switch.routerccb_wireless_5_ghz"].state == "on" &&
+                                states["sensor.routerccb_ram"].state && 
+                                states["sensor.routerccb_cpu"].state < 80 &&
+                                states["sensor.routerccb_temperature_cpu"].state < 90 && 
+                                states["sensor.myip"].state != "unavailable")
+                                return 'green'
+                                else return 'red';
+                            ]]]
+                    tap_action:
+                      action: fire-dom-event
+                      browser_mod:
+                        service: browser_mod.popup
+                        data:
+                          title: ASUS ROUTER NETWORK
+                          content:
+                            type: vertical-stack
+                            cards:
+                              - type: horizontal-stack
+                                cards:
+                                  - type: custom:bar-card
+                                    card_mod:
+                                      style: |
+                                        .card-content {
+                                          padding: 3px;
+                                          padding-top: 0px;
+                                          padding-bottom: 0px;
+                                        }
+                                        bar-card-value {
+                                          margin-right: auto;
+                                          font-size: 13px;
+                                          font-weight: bold;
+                                          text-shadow: 1px 1px #0005; 
+                                          color: white;                    
+                                        }
+                                        bar-card-name {
+                                          margin-right: auto;
+                                          font-size: 13px;
+                                          font-weight: bold;
+                                          text-shadow: 1px 1px #0005; 
+                                          color: white; 
+                                        }                                       
+                                        #states > * {
+                                          margin-top: 1;
+                                        }
+                                    entity: sensor.routerccb_wan_download_speed
+                                    name: WAN Download Speed
+                                    color: green
+                                    height: 30px
+                                    limit_value: 300
+                                    min: 0
+                                    max: 300
+                                    icon: mdi:download
+                                    positions:
+                                      icon: inside
+                                      indicator: 'off'
+                                      title: inside
+                                      value: inside
+                                  - type: custom:bar-card
+                                    card_mod:
+                                      style: |
+                                        .card-content {
+                                          padding: 3px;
+                                          padding-top: 0px;
+                                          padding-bottom: 0px;
+                                        }
+                                        bar-card-value {
+                                          margin-right: auto;
+                                          font-size: 13px;
+                                          font-weight: bold;
+                                          text-shadow: 1px 1px #0005; 
+                                          color: white;                    
+                                        }
+                                        bar-card-name {
+                                          margin-right: auto;
+                                          font-size: 13px;
+                                          font-weight: bold;
+                                          text-shadow: 1px 1px #0005; 
+                                          color: white; 
+                                        }                                       
+                                        #states > * {
+                                          margin-top: 1;
+                                        }
+                                    entity: sensor.routerccb_wan_upload_speed
+                                    name: WAN Upload Speed
+                                    color: '#3498db'
+                                    height: 30px
+                                    icon: mdi:upload
+                                    limit_value: 300
+                                    min: 0
+                                    max: 300
+                                    positions:
+                                      icon: inside
+                                      indicator: 'off'
+                                      title: inside
+                                      value: inside
+                              - type: entities
+                                card_mod:
+                                  style: |
+                                    ha-card {
+                                      font-family: var(--primary-font-family);
+                                      margin-top: 2em;
+                                    }
+                                    .card-content {
+                                      padding-top: 0px;
+                                      padding-bottom: 0px;
+                                    }                
+                                entities:
+                                  - sensor.routerccb_wan_speed
+                                  - sensor.routerccb_lan_speed
+                                  - sensor.routerccb_connected_devices
+                                  - sensor.routerccb_wired_download
+                                  - sensor.routerccb_wired_upload
+                              - type: custom:hui-element
+                                card_type: horizontal-stack
+                                cards:
+                                  - type: entities
+                                    class: information_network
+                                    entities:
+                                      - entity: sensor.routerccb_wired_download_speed
+                                        name: LAN Download Speed
+                                        style: ':host {--paper-item-icon-color: green;}'
+                                  - type: entities
+                                    class: information_network
+                                    entities:
+                                      - entity: sensor.routerccb_wired_upload_speed
+                                        name: LAN Upload Speed
+                                        style: >-
+                                          :host {--paper-item-icon-color:
+                                          #3498db;}
+                              - type: custom:mini-graph-card
+                                card_mod:
+                                  style: |
+                                    ha-card {
+                                      margin-top: -2em;
+                                    }          
+                                entities:
+                                  - color: '#3498db'
+                                    entity: sensor.routerccb_wired_download_speed
+                                  - color: green
+                                    entity: sensor.routerccb_wired_upload_speed
+                                align_state: left
+                                group: false
+                                points_per_hour: 15
+                                line_width: 3
+                                hour24: true
+                                hours_to_show: 24
+                                show:
+                                  fill: fade
+                                  icon: false
+                                  name: false
+                                  state: false
+                                  name_adaptive_color: true
+                                  labels: hover
+                                  legend: false
+                                tap_action:
+                                  action: none
+                              - type: entities
+                                entities:
+                                  - entity: sensor.speedtest_download
+                                  - entity: sensor.speedtest_upload
+                                  - entity: sensor.speedtest_ping
+                              - type: iframe
+                                card_mod:
+                                  style: |
+                                    ha-card {
+                                      margin-top: 0.3em;          
+                                url: https://www.metercustom.net/plugin/
+                                aspect_ratio: 60%
+                              - type: custom:mini-graph-card
+                                card_mod:
+                                  style: |
+                                    ha-card {
+                                      font-family: var(--primary-font-family);
+                                    }
+                                    .graph {
+                                      padding-top: 0px;
+                                      padding-bottom: 0px;
+                                    }
+                                    .info {
+                                      padding-bottom: 0px;
+                                    }
+                                    .flex {
+                                      padding-bottom: 10px;
+                                    }
+                                entities:
+                                  - sensor.routerccb_temperature_cpu
+                                name: CPU Température
+                                align_state: center
+                                align_icon: right
+                                font_size: 100
+                                font_size_header: 11
+                                hours_to_show: 24
+                                line_color: '#4AE1DC'
+                                line_width: 4
+                                animate: true
+                                points_per_hour: 2
+                                show:
+                                  fill: false
+                                  graph: line
+                                  extrema: true
+                                  icon: true
+                                  name: true
+                              - type: horizontal-stack
+                                cards:
+                                  - type: horizontal-stack
+                                    cards:
+                                      - type: custom:mini-graph-card
+                                        card_mod:
+                                          style: |
+                                            ha-card {
+                                              font-family: var(--primary-font-family);
+                                            }
+                                            .graph {
+                                              padding-top: 0px;
+                                              padding-bottom: 0px;
+                                            }
+                                            .info {
+                                              padding-bottom: 0px;
+                                            }
+                                            .flex {
+                                              padding-bottom: 10px;
+                                            }
+                                        entities:
+                                          - sensor.routerccb_cpu
+                                        name: CPU LOAD
+                                        align_state: center
+                                        align_icon: right
+                                        font_size: 100
+                                        font_size_header: 11
+                                        hours_to_show: 24
+                                        line_color: '#4A8A4A'
+                                        line_width: 4
+                                        animate: true
+                                        points_per_hour: 2
+                                        show:
+                                          fill: false
+                                          graph: line
+                                          extrema: true
+                                          icon: true
+                                          name: true
+                                  - type: custom:mini-graph-card
+                                    card_mod:
+                                      style: |
+                                        ha-card {
+                                          font-family: var(--primary-font-family);
+                                        }
+                                        .graph {
+                                          padding-top: 0px;
+                                          padding-bottom: 0px;
+                                        }
+                                        .info {
+                                          padding-bottom: 0px;
+                                        }
+                                        .flex {
+                                          padding-bottom: 10px;
+                                        }
+                                    entities:
+                                      - sensor.routerccb_ram
+                                    name: Memory USE
+                                    align_state: center
+                                    align_icon: right
+                                    font_size: 100
+                                    font_size_header: 11
+                                    hours_to_show: 24
+                                    line_color: orange
+                                    line_width: 4
+                                    animate: true
+                                    points_per_hour: 2
+                                    show:
+                                      fill: false
+                                      graph: line
+                                      extrema: true
+                                      icon: true
+                                      name: true
+                              - type: entities
+                                entities:
+                                  - type: weblink
+                                    name: FAI Admin
+                                    url: http://192.168.1.1/
+                                    icon: mdi:wan
+                                  - type: weblink
+                                    name: Router Admin
+                                    url: https://192.168.2.1:8443/
+                                    icon: mdi:router
+                                  - type: weblink
+                                    name: NO-IP
+                                    url: https://my.noip.com/dynamic-dns
+                                    icon: mdi:ip-network-outline
+                                  - type: weblink
+                                    name: MyIONOS Domain
+                                    url: >-
+                                      https://my.ionos.fr/product-overview?linkId=ft.nav.home
+                                    icon: mdi:web-refresh
+                  - type: glance
+                    entities:
+                      - entity: sensor.routerccb_cpu
+                        name: CPU
+                      - entity: sensor.routerccb_ram
+                        name: RAM
+                      - entity: sensor.routerccb_temperature_cpu
+                        name: Température
+                        styles:
+                          icon:
+                            - color: |
+                                [[[
+                                  if (entity.state < 60) return 'green';
+                                  else return 'red';
+                                ]]]
+                  - type: glance
+                    entities:
+                      - entity: sensor.myip
+                        name: IP Public
+                        icon: mdi:ip-network-outline
+                      - entity: switch.routerccb_wireless_2_4_ghz
+                        name: Wi-Fi 2,4Ghz
+                        icon: mdi:wifi-strength-2
+                      - entity: switch.routerccb_wireless_5_ghz
+                        name: Wi-Fi 5Ghz
+                        icon: mdi:wifi-strength-4
+          - type: vertical-stack
+            cards:
+              - type: entities
+                entities:
+                  - type: custom:hui-element
+                    card_type: horizontal-stack
+                    cards:
+                      - name: PORTAINER
+                        show_name: true
+                        icon: mdi:docker
+                        show_icon: true
+                        type: button
+                        tap_action:
+                          action: url
+                          url_path: http://192.168.2.26:9002/
+                      - type: custom:button-card
+                        entity: sensor.piholeccb_state
+                        name: Pi-Hole
+                        icon: mdi:pi-hole
+                        show_state: true
+                        state:
+                          - value: enabled
+                            color: green
+                            icon: mdi:pi-hole
+                          - value: disabled
+                            color: red
+                          - value: unavailable
+                            color: red
+                        tap_action:
+                          action: fire-dom-event
+                          browser_mod:
+                            service: browser_mod.popup
+                            data:
+                              title: Pi-Hole
+                              content:
+                                type: vertical-stack
+                                cards:
+                                  - type: horizontal-stack
+                                    cards:
+                                      - type: entities
+                                        entities:
+                                          - entity: switch.piholeccb
+                                          - entity: sensor.piholeccb_ads_blocked_today
+                                          - entity: >-
+                                              sensor.piholeccb_ads_percentage_blocked_today
+                                          - entity: sensor.piholeccb_dns_queries_cached
+                                          - entity: sensor.piholeccb_dns_queries_forwarded
+                                          - entity: sensor.piholeccb_dns_queries_today
+                                          - entity: sensor.piholeccb_dns_unique_domains
+                                          - entity: sensor.piholeccb_domains_blocked
+                                          - entity: sensor.piholeccb_dns_unique_clients
+                                          - entity: sensor.piholeccb_seen_clients
+                                          - type: weblink
+                                            name: Pi-Hole Admin
+                                            url: http://192.168.2.198/
+                                            icon: mdi:pi-hole
+                      - type: custom:button-card
+                        entity: sensor.transmission_status
+                        name: Transmission
+                        icon: mdi:download
+                        show_state: true
+                        state:
+                          - value: Downloading
+                            color: blue
+                            icon: mdi:download-outline
+                            styles:
+                              icon:
+                                - animation: blink 5s ease infinite
+                          - value: idle
+                            color: green
+                            icon: mdi:download-outline
+                          - value: unavailable
+                            color: red
+                            icon: mdi:download-off-outline
+                        tap_action:
+                          action: fire-dom-event
+                          browser_mod:
+                            service: browser_mod.popup
+                            data:
+                              title: Transmission
+                              content:
+                                type: vertical-stack
+                                cards:
+                                  - type: custom:transmission-card
+                                    card_mod:
+                                      style: |
+                                        ha-card {
+                                          text-align: center;
+                                          margin-top: -1em;                
+                                        }          
+                                    hide_type: false
+                                    default_type: total
+                                    display_mode: full
+                                  - type: entities
+                                    card_mod:
+                                      style: |
+                                        ha-card {
+                                          margin-top: -1.5em;                
+                                        }             
+                                    entities:
+                                      - type: divider
+                                      - type: weblink
+                                        name: Transmission Download Admin
+                                        url: http://192.168.2.26:9091/
+                                        icon: mdi:car-speed-limiter
+                                      - type: weblink
+                                        name: Upload Station
+                                        url: https://upload.cunatbrule.fr/
+                                        icon: mdi:car-speed-limiter
+                  - type: custom:hui-element
+                    card_type: horizontal-stack
+                    cards:
+                      - type: custom:button-card
+                        entity: camera.hikcam1_mainstream
+                        name: Camera
+                        icon: mdi:cctv
+                        show_state: true
+                        state:
+                          - value: idle
+                            color: green
+                          - value: unavailable
+                            color: red
+                            icon: mdi:cctv-off
+                        tap_action:
+                          action: fire-dom-event
+                          browser_mod:
+                            service: browser_mod.popup
+                            data:
+                              size: wide
+                              title: Camera
+                              content:
+                                type: horizontal-stack
+                                cards:
+                                  - camera_view: live
+                                    type: picture-glance
+                                    title: HIKCAM1
+                                    entities:
+                                      - entity: light.chambre
+                                    camera_image: camera.hikcam1_mainstream
+                                  - camera_view: live
+                                    type: picture-glance
+                                    title: HIKCAM2
+                                    entities:
+                                      - entity: light.chambre
+                                    camera_image: camera.hikcam2_mainstream
+                                  - camera_view: live
+                                    type: picture-glance
+                                    title: HIKCAM3
+                                    entities:
+                                      - entity: light.chambre
+                                    camera_image: camera.hikcam3_mainstream
+                      - type: custom:button-card
+                        entity: sensor.printer_hp_laserjet_100_colormfp_m175nw
+                        name: HP LaserJet
+                        icon: mdi:printer
+                        show_state: true
+                        state:
+                          - value: idle
+                            color: green
+                            icon: mdi:printer
+                          - value: unavailable
+                            color: red
+                            icon: mdi:printer-off
+                        tap_action:
+                          action: fire-dom-event
+                          browser_mod:
+                            service: browser_mod.popup
+                            data:
+                              title: Imprimantes
+                              content:
+                                type: vertical-stack
+                                cards:
+                                  - type: custom:bar-card
+                                    stack: horizontal
+                                    direction: up
+                                    height: 150px
+                                    width: 80%
+                                    title: HP LaserJet 100 color MFP M175nw
+                                    entities:
+                                      - entity:
+                                          - >-
+                                            sensor.printer_hp_laserjet_100_colormfp_m175nw_cyan_cartridge_hp_ce311a
+                                        name: Cyan
+                                        color: cyan
+                                      - entity:
+                                          - >-
+                                            sensor.printer_hp_laserjet_100_colormfp_m175nw_magenta_cartridge_hp_ce313a
+                                        name: Magenta
+                                        color: magenta
+                                      - entity:
+                                          - >-
+                                            sensor.printer_hp_laserjet_100_colormfp_m175nw_yellow_cartridge_hp_ce312a
+                                        name: Yellow
+                                        color: yellow
+                                      - entity:
+                                          - >-
+                                            sensor.printer_hp_laserjet_100_colormfp_m175nw_black_cartridge_hp_ce310a
+                                        name: Black
+                                        color: black
+                                      - entity:
+                                          - >-
+                                            sensor.printer_hp_laserjet_100_colormfp_m175nw_imaging_drum_hp_ce314a
+                                        name: Tambour
+                                  - type: custom:bar-card
+                                    stack: horizontal
+                                    direction: up
+                                    height: 150px
+                                    width: 80%
+                                    title: BROTHER MFC-L3750CDW (CHANGE SENSOR)
+                                    entities:
+                                      - entity:
+                                          - sensor.sm_a528b_sim_1
+                                        name: Cyan
+                                        color: cyan
+                                      - entity:
+                                          - sensor.sm_a528b_sim_1
+                                        name: Magenta
+                                        color: magenta
+                                      - entity:
+                                          - sensor.sm_a528b_sim_1
+                                        name: Yellow
+                                        color: yellow
+                                      - entity:
+                                          - sensor.sm_a528b_sim_1
+                                        name: Black
+                                        color: black
+                                      - entity:
+                                          - sensor.sm_a528b_sim_1
+                                        name: Tambour
+                                  - type: entities
+                                    entities:
+                                      - type: weblink
+                                        name: Printer Brother Admin
+                                        url: http://192.168.2.27/
+                                        icon: mdi:printer
+                                      - type: weblink
+                                        name: Printer HP Admin
+                                        url: http://192.168.2.60/
+                                        icon: mdi:printer
+                      - type: custom:button-card
+                        entity: sensor.3dprintccb_current_state
+                        name: Ender 3 Pro
+                        icon: mdi:printer-3d
+                        show_state: true
+                        state:
+                          - value: Operational
+                            color: green
+                          - value: unavailable
+                            color: red
+                            icon: mdi:printer-3d-off
+                          - value: Printing
+                            color: blue
+                            icon: mdi:printer-3d-nozzle
+                            styles:
+                              icon:
+                                - animation: blink 5s ease infinite
+                          - value: Paused
+                            color: orange
+                            icon: mdi:cog-pause-outline
+                        tap_action:
+                          action: fire-dom-event
+                          browser_mod:
+                            service: browser_mod.popup
+                            data:
+                              title: Imprimante 3D
+                              content:
+                                type: vertical-stack
+                                cards:
+                                  - type: entities
+                                    entities:
+                                      - type: custom:restriction-card
+                                        row: true
+                                        card:
+                                          entity: switch.mqtt_aqara_smartplug
+                                          icon: mdi:power-socket-de
+                                          name: Prise imprimante 3D
+                                        condition:
+                                          entity: switch.mqtt_aqara_smartplug
+                                          value: 'on'
+                                        restrictions:
+                                          confirm:
+                                            text: Are you sure you want to unlock?
+                                      - type: weblink
+                                        name: 3DPrinter
+                                        url: http://192.168.2.34/
+                                        icon: mdi:printer-3d
+                                  - type: custom:bar-card
+                                    entities:
+                                      - entity: sensor.3dprintccb_job_percentage
+                                        name: Pourcentage d'impression
+                                        icon: mdi:printer-check
+                                  - type: entities
+                                    entities:
+                                      - entity: sensor.3dprintccb_start_time
+                                        name: Début d'impression
+                                        icon: mdi:clock-start
+                                      - entity: sensor.3dprintccb_estimated_finish_time
+                                        name: Fin d'impression
+                                        icon: mdi:clock-end
+                                      - entity: sensor.3dprintccb_target_bed_temp
+                                        name: Température plateau cible
+                                        icon: mdi:thermometer-auto
+                                      - entity: sensor.3dprintccb_actual_bed_temp
+                                        name: Température plateau
+                                      - entity: sensor.3dprintccb_target_tool0_temp
+                                        name: Température buse cible
+                                        icon: mdi:thermometer-auto
+                                      - entity: sensor.3dprintccb_actual_tool0_temp
+                                        name: Température buse
+                                  - type: horizontal-stack
+                                    cards:
+                                      - type: button
+                                        name: STOP
+                                        icon: mdi:stop
+                                        entity: button.3dprintccb_stop_job
+                                        tap_action:
+                                          action: toggle
+                                      - type: button
+                                        name: PAUSE
+                                        icon: mdi:pause
+                                        entity: button.3dprintccb_pause_job
+                                        tap_action:
+                                          action: toggle
+                                      - type: button
+                                        name: REPRENDRE
+                                        icon: mdi:play
+                                        icon_state: true
+                                        entity: button.3dprintccb_resume_job
+                                        tap_action:
+                                          action: toggle
+                                  - type: sensor
+                                    graph: line
+                                    hours_to_show: 12
+                                    detail: 2
+                                    entity: sensor.mqtt_aqara_smartplug_power
+          - type: custom:button-card
+            name: Gestion de maintenance
+            icon: mdi:arrow-up-bold-hexagon-outline
+            tap_action:
+              action: fire-dom-event
+              browser_mod:
+                service: browser_mod.popup
+                data:
+                  title: Mise à jour des micrologiciels
+                  size: wide
+                  content:
+                    type: custom:vertical-stack-in-card
+                    cards:
+                      - type: horizontal-stack
+                        cards:
+                          - type: custom:button-card
+                            name: Home Assistant
+                            icon: mdi:home-assistant
+                            size: 10%
+                            styles:
+                              name:
+                                - color: |
+                                    [[[
+                                      if (states["update.home_assistant_core_update"].state && 
+                                      states["update.home_assistant_operating_system_update"].state &&
+                                      states["update.home_assistant_supervisor_update"].state)
+                                      return 'green';
+                                      else return 'red';
+                                    ]]]
+                              icon:
+                                - color: |
+                                    [[[
+                                      if (states["update.home_assistant_core_update"].state && 
+                                      states["update.home_assistant_operating_system_update"].state &&
+                                      states["update.home_assistant_supervisor_update"].state)
+                                      return 'green';
+                                      else return 'red';
+                                    ]]]
+                            tap_action:
+                              action: fire-dom-event
+                              browser_mod:
+                                service: browser_mod.popup
+                                data:
+                                  title: Home Assistant
+                                  content:
+                                    type: custom:vertical-stack-in-card
+                                    cards:
+                                      - type: glance
+                                        entities:
+                                          - entity: update.home_assistant_core_update
+                                            name: Core
+                                            card_mod:
+                                              style: >
+                                                :host { color: {% if
+                                                states.update.home_assistant_core_update.attributes.installed_version
+                                                ==
+                                                states.update.home_assistant_core_update.attributes.latest_version
+                                                %} green{% else %} red {% endif %};}
+                                          - entity: >-
+                                              update.home_assistant_operating_system_update
+                                            name: Operating System
+                                            card_mod:
+                                              style: >
+                                                :host { color: {% if
+                                                states.update.home_assistant_operating_system_update.attributes.installed_version
+                                                ==
+                                                states.update.home_assistant_operating_system_update.attributes.latest_version
+                                                %} green{% else %} red {% endif %};}
+                                          - entity: update.home_assistant_supervisor_update
+                                            name: Supervisor
+                                            card_mod:
+                                              style: >
+                                                :host { color: {% if
+                                                states.update.home_assistant_supervisor_update.attributes.installed_version
+                                                ==
+                                                states.update.home_assistant_supervisor_update.attributes.latest_version
+                                                %} green{% else %} red {% endif %};}
+                          - type: custom:button-card
+                            name: Pi-Hole
+                            icon: mdi:pi-hole
+                            size: 10%
+                            styles:
+                              name:
+                                - color: |
+                                    [[[
+                                      if (states["update.piholeccb_core_update_available"].state &&
+                                      states["update.piholeccb_ftl_update_available"].state && 
+                                      states["update.piholeccb_web_update_available"].state == "off")
+                                      return 'green';
+                                      else return 'red';
+                                    ]]]
+                              icon:
+                                - color: |
+                                    [[[
+                                      if (states["update.piholeccb_core_update_available"].state &&
+                                      states["update.piholeccb_ftl_update_available"].state && 
+                                      states["update.piholeccb_web_update_available"].state == "off")
+                                      return 'green';
+                                      else return 'red';
+                                    ]]]
+                            tap_action:
+                              action: fire-dom-event
+                              browser_mod:
+                                service: browser_mod.popup
+                                data:
+                                  title: Pi-Hole
+                                  content:
+                                    type: custom:vertical-stack-in-card
+                                    cards:
+                                      - type: glance
+                                        entities:
+                                          - entity: update.piholeccb_core_update_available
+                                            name: Core
+                                            card_mod:
+                                              style: >
+                                                :host { color: {% if
+                                                states.update.piholeccb_core_update_available.attributes.installed_version
+                                                ==
+                                                states.update.piholeccb_core_update_available.attributes.latest_version
+                                                %} green{% else %} red {% endif %};}
+                                          - entity: update.piholeccb_ftl_update_available
+                                            name: FTP
+                                            card_mod:
+                                              style: >
+                                                :host { color: {% if
+                                                states.update.piholeccb_ftl_update_available.attributes.installed_version
+                                                ==
+                                                states.update.piholeccb_ftl_update_available.attributes.latest_version
+                                                %} green{% else %} red {% endif %};}
+                                          - entity: update.piholeccb_web_update_available
+                                            name: Web
+                                            card_mod:
+                                              style: >
+                                                :host { color: {% if
+                                                states.update.piholeccb_web_update_available.attributes.installed_version
+                                                ==
+                                                states.update.piholeccb_web_update_available.attributes.latest_version
+                                                %} green{% else %} red {% endif %};}
+                      - type: glance
+                        title: Hardware
+                        entities:
+                          - entity: update.nasccb_dsm_update
+                            name: NAS DSM
+                            card_mod:
+                              style: >
+                                :host { color: {% if
+                                states.update.nasccb_dsm_update.attributes.installed_version
+                                ==
+                                states.update.nasccb_dsm_update.attributes.latest_version
+                                %} green{% else %} red {% endif %};}
+                          - entity: update.routerccb_firmware_update
+                            name: Router Firmware
+                            card_mod:
+                              style: >
+                                :host { color: {% if
+                                states.update.routerccb_firmware_update.attributes.installed_version
+                                ==
+                                states.update.routerccb_firmware_update.attributes.latest_version
+                                %} green{% else %} red {% endif %};}
+                      - type: glance
+                        title: Iot
+                        entities:
+                          - entity: >-
+                              binary_sensor.mqtt_aqara_smartplug_update_available
+                            name: Aqara-PC
+                            card_mod:
+                              style: >
+                                :host { color: {% if
+                                states.binary_sensor.mqtt_aqara_smartplug_update_available.attributes.update_available
+                                == false %} green{% else %} red {% endif %};}
+                          - entity: binary_sensor.mqtt_lixee_zlinky_update_available
+                            name: Lixee-Elec
+                            card_mod:
+                              style: >
+                                :host { color: {% if
+                                states.binary_sensor.mqtt_lixee_zlinky_update_available.attributes.update_available
+                                == false %} green{% else %} red {% endif %};}
+                          - entity: >-
+                              binary_sensor.mqtt_develco_smokedetector_update_available
+                            name: Develco-Smoke
+                            card_mod:
+                              style: >
+                                :host { color: {% if
+                                states.binary_sensor.mqtt_develco_smokedetector_update_available.attributes.update_available
+                                == false %} green{% else %} red {% endif %};}
+                          - entity: >-
+                              binary_sensor.mqtt_aqara_thermostat_update_available
+                            name: Aqara-Thermostat
+                            card_mod:
+                              style: >
+                                :host { color: {% if
+                                states.binary_sensor.mqtt_aqara_thermostat_update_available.attributes.update_available
+                                == false %} green{% else %} red {% endif %};}
+                          - entity: binary_sensor.mqtt_develco_keypad_update_available
+                            name: Develco KeyPad
+                            card_mod:
+                              style: >
+                                :host { color: {% if
+                                states.binary_sensor.mqtt_develco_keypad_update_available.attributes.update_available
+                                == false %} green{% else %} red {% endif %};}
+                      - type: vertical-stack
+                        title: Liens des versions de mise à jour des micrologiciels
+                        cards:
+                          - type: horizontal-stack
+                            cards:
+                              - type: entities
+                                entities:
+                                  - type: weblink
+                                    name: Windows 10
+                                    url: >-
+                                      https://learn.microsoft.com/fr-fr/windows/release-health/release-information
+                                    icon: mdi:microsoft-windows
+                                  - type: weblink
+                                    name: Windows 11
+                                    url: >-
+                                      https://learn.microsoft.com/fr-fr/windows/release-health/windows11-release-information
+                                    icon: mdi:microsoft
+                                  - type: weblink
+                                    name: Linux Ubuntu
+                                    url: https://releases.ubuntu.com
+                                    icon: mdi:ubuntu
+                                  - type: weblink
+                                    name: Apple
+                                    url: https://support.apple.com/fr-fr/HT201222
+                                    icon: mdi:apple
+                                  - type: weblink
+                                    name: Android
+                                    url: >-
+                                      https://developer.android.com/about/versions
+                                    icon: mdi:android
+                                  - type: weblink
+                                    name: LibreELEC
+                                    url: https://wiki.libreelec.tv/project/releases
+                                    icon: mdi:kodi
+                              - type: entities
+                                entities:
+                                  - type: weblink
+                                    name: Synology DS220+
+                                    url: >-
+                                      https://www.synology.com/fr-fr/releaseNote/DSM?model=DS220%2B
+                                    icon: mdi:nas
+                                  - type: weblink
+                                    name: ASUSWRT-MERLIN
+                                    url: https://www.asuswrt-merlin.net/changelog
+                                    icon: mdi:router-wireless
+                                  - type: weblink
+                                    name: Shield TV
+                                    url: >-
+                                      https://www.nvidia.com/en-us/shield/software-update
+                                    icon: mdi:android
+                                  - type: weblink
+                                    name: Samsung A52s
+                                    url: >-
+                                      https://doc.samsungmobile.com/sm-a528b/xef/doc.html
+                                    icon: mdi:devices
+                                  - type: weblink
+                                    name: Samsung A10
+                                    url: >-
+                                      https://doc.samsungmobile.com/sm-a105fn/xef/doc.html
+                                    icon: mdi:devices
+                                  - type: weblink
+                                    name: Docker-Pi-Hole
+                                    url: >-
+                                      https://github.com/pi-hole/docker-pi-hole/releases
+                                    icon: mdi:pi-hole
+                                  - type: weblink
+                                    name: Docker-Calibre-Web
+                                    url: >-
+                                      https://github.com/linuxserver/docker-calibre-web/releases
+                                    icon: mdi:bookshelf
+                                  - type: weblink
+                                    name: Docker-Transmission-OpenVPN
+                                    url: >-
+                                      https://github.com/haugene/docker-transmission-openvpn/releases
+                                    icon: mdi:download
+                              - type: entities
+                                entities:
+                                  - type: weblink
+                                    name: Home Assistant
+                                    url: >-
+                                      https://www.home-assistant.io/blog/categories/release-notes
+                                    icon: mdi:home-assistant
+                                  - type: weblink
+                                    name: Harmony Hub
+                                    url: >-
+                                      https://support.myharmony.com/en-ls/release-notes
+                                    icon: mdi:remote-tv
+                                  - type: weblink
+                                    name: Philips Hue
+                                    url: >-
+                                      https://www.philips-hue.com/fr-fr/support/release-notes
+                                    icon: mdi:lightbulb-group
+                                  - type: weblink
+                                    name: Kodi
+                                    url: https://kodi.wiki/view/Releases
+                                    icon: mdi:kodi
+                                  - type: weblink
+                                    name: Ender3-Pro
+                                    url: >-
+                                      https://www.creality.com/pages/download-ender-3-pro
+                                    icon: mdi:rotate-3d
+                                  - type: weblink
+                                    name: Camera Hikvision
+                                    url: >-
+                                      https://www.hikvision.com/en/support/download/firmware/
+                                    icon: mdi:cctv
+                                  - type: weblink
+                                    name: Cardo Freecom 2
+                                    url: >-
+                                      https://www.cardosystems.com/freecom-2-release-notes/
+                                    icon: mdi:motorbike
+                      - type: custom:hui-element
+                        card_type: markdown
+                        content: >-
+                          ### Version logiciels de mes appareils :
+
+                          - Samsung A105fn Version : A105FNXXS8CVH1
+
+                          - Lenovo TB-8505X Version : TB-8505X-RF01-220706
+
+                          - HP LaserJet 100 color MFP M175nw : 20140618
+
+                          - HIKCAM 1 / 2-3 : V5.5.89 build 210429 / V5.5.82
+                          build 190909
+
+                          - Cardo Freecom 2 : v.3.6
+        view_layout: null
+        position: main

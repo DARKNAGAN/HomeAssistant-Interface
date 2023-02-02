@@ -1,0 +1,369 @@
+- id: '1652790347261'
+  alias: AutomationWCLight
+  description: ''
+  trigger:
+  - type: motion
+    platform: device
+    device_id: 56beb83c537bcfb8d33ca520ce133f43
+    entity_id: binary_sensor.mqtt_aqara_motionsensor_occupancy
+    domain: binary_sensor
+  condition: []
+  action:
+  - if:
+    - condition: time
+      after: '21:00:00'
+      before: 09:00:00
+      weekday:
+      - mon
+      - tue
+      - wed
+      - thu
+      - fri
+      - sat
+      - sun
+    then:
+    - service: scene.turn_on
+      target:
+        entity_id: scene.toilette_attenue
+      metadata: {}
+    else:
+    - service: scene.turn_on
+      target:
+        entity_id: scene.toilette_midwinter
+      metadata: {}
+  - wait_for_trigger:
+    - type: no_motion
+      platform: device
+      device_id: 56beb83c537bcfb8d33ca520ce133f43
+      entity_id: binary_sensor.mqtt_aqara_motionsensor_occupancy
+      domain: binary_sensor
+    continue_on_timeout: true
+  - type: turn_off
+    device_id: e43ecda0e796ff31752a145532858375
+    entity_id: light.toilette
+    domain: light
+  mode: single
+- id: '1611074878345'
+  alias: NotificationIPchange
+  description: Notification du changement IP WAN
+  trigger:
+  - platform: state
+    entity_id: sensor.myip
+    to:
+    - unknown
+    - unavailable
+  action:
+  - service: notify.mobile_app_sm_a528b
+    data:
+      message: 'Votre réseau domestique à une nouvelle adresse IP Public : {{ states(''sensor.myip'')
+        }}<br> Penser à modifier votre nom de domaine!'
+  - service: notify.persistent_notification
+    data:
+      message: 'Votre réseau domestique à une nouvelle adresse IP Public : {{ states(''sensor.myip'')}}<br>   Penser
+        à modifier votre nom de domaine!'
+- id: '1667242346458'
+  alias: AutomationLeaveHome
+  description: ''
+  trigger:
+  - platform: zone
+    entity_id: person.christian
+    zone: zone.home
+    event: leave
+  condition: []
+  action:
+  - parallel:
+    - type: turn_off
+      device_id: 0a1e6095f7f713a0ee8e67553e127b6f
+      entity_id: light.salon
+      domain: light
+    - type: turn_off
+      device_id: d497ae9ccc7b466c16777d28aca28c54
+      entity_id: light.chambre
+      domain: light
+    - type: turn_off
+      device_id: 5ed46a7d61588c27a715286ac0229efb
+      entity_id: light.salle_de_jeux
+      domain: light
+    - type: turn_off
+      device_id: 2de03184289f71b9ce832af0965b67e5
+      entity_id: remote.harmonyccb
+      domain: remote
+  mode: single
+- id: '1669416158205'
+  alias: AutomationComingHome
+  description: ''
+  trigger:
+  - platform: zone
+    entity_id: person.christian
+    zone: zone.home
+    event: enter
+  condition: []
+  action:
+  - delay:
+      hours: 0
+      minutes: 1
+      seconds: 30
+      milliseconds: 0
+  - if:
+    - condition: time
+      weekday:
+      - mon
+      - tue
+      - wed
+      - thu
+      - sat
+      - fri
+      - sun
+      after: '18:00:00'
+      before: 07:00:00
+    then:
+    - service: scene.turn_on
+      target:
+        entity_id: scene.salon_stimulation
+      metadata: {}
+  mode: single
+- id: '1670403341162'
+  alias: PowerOff3DPrinter
+  description: Automatisation extinction AqaraPC si l'imprimante n'est pas utilisé
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.mqtt_aqara_smartplug_energy
+    for:
+      hours: 0
+      minutes: 7
+      seconds: 0
+    attribute: power
+    below: 10
+  condition: []
+  action:
+  - type: turn_off
+    device_id: 93469bc4043ae532e9571b3e6abd1f0b
+    entity_id: switch.mqtt_aqara_pc
+    domain: switch
+  - service: notify.persistent_notification
+    data:
+      message: Votre impression 3D viens de se finir l'imprimante vient de s'éteindre!
+      title: Fin d'impression 3D
+  mode: single
+- id: '1671440540838'
+  alias: NotificationBirthday
+  description: ''
+  trigger:
+  - platform: calendar
+    event: start
+    offset: '9:0:0'
+    entity_id: calendar.agenda_anniversaires_agenda_anniversaires
+  condition: []
+  action:
+  - service: notify.notify
+    data:
+      title: '{{ states.calendar.agenda_anniversaires_agenda_anniversaires.attributes.message
+        }}'
+      message: Souhaiter un joyeux anniversaire!
+  mode: single
+- id: '1671446848812'
+  alias: NotificationHolidays
+  description: ''
+  trigger:
+  - platform: calendar
+    event: start
+    offset: '-12:0:0'
+    entity_id: calendar.agenda_fetes_agenda_fetes
+  condition: []
+  action:
+  - service: notify.notify
+    data:
+      title: '{{ states.calendar.agenda_fetes_agenda_fetes.attributes.message }}'
+      message: Demain sera un jour ferié!
+  mode: single
+- id: '1674687906200'
+  alias: Mount NFS Folders
+  description: ''
+  trigger:
+  - platform: homeassistant
+    event: start
+  condition: []
+  action:
+  - service: shell_command.map_nas_musiques_folder
+    data: {}
+  - service: shell_command.map_nas_videos_folder
+    data: {}
+  - service: shell_command.map_nas_films_folder
+    data: {}
+  - service: shell_command.map_nas_series_folder
+    data: {}
+  mode: single
+- id: '1674945271345'
+  alias: Smoke Alert
+  description: ''
+  trigger:
+  - type: smoke
+    platform: device
+    device_id: 7868cd6f12409cb60f8d2d93be21e792
+    entity_id: binary_sensor.mqtt_develco_smokedetector_smoke
+    domain: binary_sensor
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 0
+  condition: []
+  action:
+  - parallel:
+    - repeat:
+        while:
+        - condition: state
+          entity_id: binary_sensor.mqtt_develco_smokedetector_smoke
+          state: 'on'
+          for:
+            hours: 0
+            minutes: 0
+            seconds: 0
+        sequence:
+        - service: script.red_flash_alert
+          data: {}
+      enabled: true
+    - repeat:
+        while:
+        - condition: state
+          entity_id: binary_sensor.mqtt_develco_smokedetector_smoke
+          state: 'on'
+        sequence:
+        - service: notify.persistent_notification
+          data:
+            message: Alarme incendie fumée détectée
+          enabled: true
+        - service: notify.notify
+          data:
+            message: Alarme Incendie Fumée détécté
+          enabled: true
+        - delay:
+            hours: 0
+            minutes: 0
+            seconds: 45
+            milliseconds: 0
+    - type: turn_on
+      device_id: 7868cd6f12409cb60f8d2d93be21e792
+      entity_id: switch.mqtt_develco_smokedetector_alarm
+      domain: switch
+    enabled: true
+  mode: single
+- id: '1675012508427'
+  alias: Alarme clavier désarmé code
+  description: ''
+  trigger:
+  - platform: device
+    domain: mqtt
+    device_id: 87e9208ee426225f9d579740640d764c
+    type: action
+    subtype: disarm
+    discovery_id: 0x0015bc0043001895 action_disarm
+  condition: []
+  action:
+  - service: alarm_control_panel.alarm_disarm
+    data:
+      code: 2009
+    target:
+      entity_id: alarm_control_panel.alarmo
+  mode: single
+- id: '1675012842612'
+  alias: Alarme clavier armée absent
+  description: ''
+  trigger:
+  - platform: device
+    domain: mqtt
+    device_id: 87e9208ee426225f9d579740640d764c
+    type: action
+    subtype: arm_all_zones
+    discovery_id: 0x0015bc0043001895 action_arm_all_zones
+  condition:
+  - condition: state
+    entity_id: alarm_control_panel.alarmo
+    state: disarmed
+  action:
+  - service: alarm_control_panel.alarm_arm_away
+    data:
+      code: '2009'
+    target:
+      entity_id: alarm_control_panel.alarmo
+  mode: single
+- id: '1675013236645'
+  alias: Alarme clavier armée nuit
+  description: ''
+  trigger:
+  - platform: device
+    domain: mqtt
+    device_id: 87e9208ee426225f9d579740640d764c
+    type: action
+    subtype: arm_night_zones
+    discovery_id: 0x0015bc0043001895 action_arm_night_zones
+  condition:
+  - condition: state
+    entity_id: alarm_control_panel.alarmo
+    state: disarmed
+  action:
+  - service: alarm_control_panel.alarm_arm_night
+    data:
+      code: '2009'
+    target:
+      entity_id: alarm_control_panel.alarmo
+  mode: single
+- id: '1675013318529'
+  alias: Alarme clavier armée maison
+  description: ''
+  trigger:
+  - platform: device
+    domain: mqtt
+    device_id: 87e9208ee426225f9d579740640d764c
+    type: action
+    subtype: arm_day_zones
+    discovery_id: 0x0015bc0043001895 action_arm_day_zones
+  condition:
+  - condition: state
+    entity_id: alarm_control_panel.alarmo
+    state: disarmed
+  action:
+  - service: alarm_control_panel.alarm_arm_home
+    data:
+      code: '2009'
+    target:
+      entity_id: alarm_control_panel.alarmo
+  mode: single
+- id: '1675015200194'
+  alias: Alarme clavier armée absent
+  description: ''
+  trigger:
+  - platform: device
+    device_id: 3d444a96a33c28fd2e7ce5b8f415c93e
+    domain: alarm_control_panel
+    entity_id: alarm_control_panel.alarmo
+    type: armed_away
+  condition:
+  - condition: state
+    entity_id: alarm_control_panel.alarmo
+    state: disarmed
+  action:
+  - service: alarm_control_panel.alarm_arm_away
+    data: {}
+    target:
+      entity_id: alarm_control_panel.alarmo
+  mode: single
+- id: '1675016405590'
+  alias: 'Alarme clavier alarme HA désarmée '
+  description: ''
+  trigger:
+  - platform: event
+    event_type: zha_event
+    event_data:
+      command: arm
+      args:
+        arm_mode: 0
+        arm_mode_description: Disarm
+        code: 2009
+        zone_id: 0
+  action:
+  - service: alarm_control_panel.alarm_disarm
+    data:
+      code: 2009
+    target:
+      entity_id: alarm_control_panel.alarmo
+  mode: single

@@ -1,0 +1,217 @@
+start_youtube:
+  sequence:
+  - service: media_player.select_source
+    target:
+      entity_id: media_player.SHIELDCCB
+    data:
+      source: com.google.android.youtube.tv
+start_netflix:
+  sequence:
+  - service: media_player.select_source
+    target:
+      entity_id: media_player.SHIELDCCB
+    data:
+      source: com.netflix.ninja
+start_kodi:
+  sequence:
+  - service: media_player.select_source
+    target:
+      entity_id: media_player.SHIELDCCB
+    data:
+      source: org.xbmc.kodi
+start_spotify:
+  sequence:
+  - service: media_player.select_source
+    target:
+      entity_id: media_player.SHIELDCCB
+    data:
+      source: com.spotify.tv.android
+find_my_phone:
+  alias: find_my_phone
+  sequence:
+  - device_id: dc9523763383dcb7c4b3926d63d082ef
+    domain: mobile_app
+    type: notify
+    title: Home Assistant recherche le téléphone!
+    message: Home Assistant
+    data:
+      ttl: 0
+      priority: high
+      channel: alarm_stream
+  mode: single
+  icon: mdi:cellphone-marker
+find_my_tab:
+  alias: find_my_tab
+  sequence:
+  - device_id: 232fd558114a7a09af507ca11e9d29f7
+    domain: mobile_app
+    type: notify
+    title: Home Assistant recherche le téléphone!
+    message: Home Assistant
+    data:
+      ttl: 0
+      priority: high
+      channel: alarm_stream
+  mode: single
+  icon: mdi:cellphone-marker
+find_my_moto:
+  alias: find_my_moto
+  sequence:
+  - device_id: b6c81c54acd94827ecf58f018af7fa65
+    domain: mobile_app
+    type: notify
+    title: Home Assistant recherche la moto!
+    message: Home Assistant
+  mode: single
+  icon: mdi:cellphone-marker
+red_flash_alarm:
+  icon: mdi:alarm-light-outline
+  alias: Red Flash Alarm
+  mode: single
+  sequence:
+  - type: turn_on
+    device_id: 7868cd6f12409cb60f8d2d93be21e792
+    entity_id: switch.mqtt_develco_smokedetector_alarm
+    domain: switch
+  - service: light.turn_on
+    data:
+      color_name: red
+    target:
+      entity_id:
+      - light.hue_whitecolor1
+      - light.hue_whitecolor2
+  - service: light.turn_on
+    data:
+      brightness_pct: 100
+      flash: long
+    target:
+      entity_id:
+      - light.hue_whitecolor1
+      - light.hue_whitecolor2
+  - delay: 00:00:15
+  - repeat:
+      until:
+      - condition: state
+        entity_id: alarm_control_panel.alarmo
+        state: triggered
+      sequence:
+      - service: script.turn_on
+        data: {}
+        target:
+          entity_id: script.red_flash_alarm_loop
+red_flash_alarm_loop:
+  icon: mdi:reload
+  alias: Red Flash Alarm - Loop
+  sequence:
+  - delay:
+      seconds: 0.5
+  - service: script.turn_on
+    target:
+      entity_id: script.red_flash_alarm
+red_flash_alert:
+  icon: mdi:alarm-light
+  alias: Red Flash Alert
+  sequence:
+  - service: light.turn_on
+    data:
+      color_name: red
+    target:
+      entity_id:
+      - light.hue_whitecolor1
+      - light.hue_whitecolor2
+  - service: light.turn_on
+    data:
+      brightness_pct: 100
+      flash: long
+    target:
+      entity_id:
+      - light.hue_whitecolor1
+      - light.hue_whitecolor2
+  - delay:
+      seconds: 17
+  - service: light.turn_off
+    target:
+      entity_id:
+      - light.hue_whitecolor1
+      - light.hue_whitecolor2
+    data: {}
+  mode: single
+green_flash_alert:
+  icon: mdi:alarm-light
+  alias: Green Flash Alert
+  sequence:
+  - service: light.turn_on
+    data:
+      color_name: green
+    target:
+      entity_id:
+      - light.hue_whitecolor1
+      - light.hue_whitecolor2
+  - service: light.turn_on
+    data:
+      brightness_pct: 100
+      flash: long
+    target:
+      entity_id:
+      - light.hue_whitecolor1
+      - light.hue_whitecolor2
+  - delay:
+      seconds: 17
+  - service: light.turn_off
+    target:
+      entity_id:
+      - light.hue_whitecolor1
+      - light.hue_whitecolor2
+    data: {}
+  mode: single
+blue_flash_alert:
+  icon: mdi:alarm-light
+  alias: Blue Flash Alert
+  sequence:
+  - service: script.alarm_alert_state
+    data: {}
+  - service: light.turn_on
+    data:
+      color_name: blue
+    target:
+      entity_id:
+      - light.hue_whitecolor1
+      - light.hue_whitecolor2
+  - service: light.turn_on
+    data:
+      brightness_pct: 100
+      flash: long
+    target:
+      entity_id:
+      - light.hue_whitecolor1
+      - light.hue_whitecolor2
+  - delay:
+      seconds: 50
+  - service: light.turn_off
+    target:
+      entity_id:
+      - light.hue_whitecolor1
+      - light.hue_whitecolor2
+    data: {}
+  mode: single
+alarm_alert_state:
+  alias: Alarm Alert State
+  sequence:
+  - type: turn_on
+    device_id: 7868cd6f12409cb60f8d2d93be21e792
+    entity_id: switch.mqtt_develco_smokedetector_alarm
+    domain: switch
+  - type: turn_off
+    device_id: 7868cd6f12409cb60f8d2d93be21e792
+    entity_id: switch.mqtt_develco_smokedetector_alarm
+    domain: switch
+  - type: turn_on
+    device_id: 7868cd6f12409cb60f8d2d93be21e792
+    entity_id: switch.mqtt_develco_smokedetector_alarm
+    domain: switch
+  - type: turn_off
+    device_id: 7868cd6f12409cb60f8d2d93be21e792
+    entity_id: switch.mqtt_develco_smokedetector_alarm
+    domain: switch
+  mode: single
+  icon: mdi:alarm-bell
